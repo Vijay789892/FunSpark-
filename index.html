@@ -1,0 +1,1687 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunSpark - आपका मनोरंजन हब!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ग्लोबल स्टाइल्स --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-color-dark: #0056b3;
+            --secondary-color: #ff4081; /* Love Pink */
+            --accent-color: #6f42c1; /* Home Purple */
+            --friendship-primary: #0984e3; /* Friendship Blue */
+            --friendship-secondary: #6c5ce7; /* Friendship Purple */
+            --papa-love-primary: #2d3436; /* Papa Dark Gray */
+            --papa-love-secondary: #74b9ff; /* Papa Light Blue */
+            --maa-love-primary: #fd79a8; /* Maa Pink */
+            --maa-love-secondary: #e17055; /* Maa Orange/Red */
+            --sibling-love-primary: #74b9ff; /* Sibling Blue */
+            --sibling-love-secondary: #fd79a8; /* Sibling Pink */
+
+            --surface-color: #ffffff;
+            --text-color: #333333;
+            --light-text-color: #f8f9fa;
+            --background-color: #f0f2f5;
+            --border-color: #e0e0e0;
+            --error-color: #dc3545;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Noto Sans Devanagari', 'Arial', sans-serif; background-color: var(--background-color); color: var(--text-color); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* Header */
+        header { background-color: var(--primary-color); color: var(--light-text-color); padding: 0.8rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; width: 100%; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; width: 90%; max-width: 1100px; margin: 0 auto; padding: 0 15px; }
+        .logo { font-size: 1.8rem; font-weight: 700; cursor: pointer; }
+        .logo .fa-grin-hearts { color: var(--secondary-color); margin-left: 5px; }
+        .nav-menu { position: relative; }
+        .features-menu-btn { background-color: var(--accent-color); color: var(--light-text-color); border: none; padding: 0.6rem 1.2rem; border-radius: 5px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; }
+        .features-menu-btn:hover { background-color: var(--primary-color-dark); }
+        .features-menu-btn .fa-bars { margin-right: 8px; }
+        .features-dropdown { display: none; position: absolute; right: 0; top: calc(100% + 5px); background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1001; min-width: 250px; padding: 0.5rem 0; max-height: 80vh; overflow-y: auto; }
+        .features-dropdown.active { display: block; }
+        .features-dropdown a { display: block; padding: 0.75rem 1.5rem; text-decoration: none; color: var(--text-color); font-size: 0.95rem; transition: background-color 0.2s, color 0.2s; }
+        .features-dropdown a:hover { background-color: var(--primary-color); color: var(--light-text-color); }
+        .features-dropdown a .fa-fw { margin-right: 10px; width: 20px; text-align: center; }
+
+        /* Main Content Area */
+        main { flex-grow: 1; padding: 0; }
+        .page-content { width: 100%; display: none; animation: fadeInPage 0.5s ease-out; position: relative; /* Needed for absolute positioned children like sg-floating-emojis */ }
+        .page-content.active { display: flex; flex-direction: column; align-items: center; }
+        @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Home Welcome Content */
+        #home-welcome-content { text-align: center; padding: 2rem; background-color: var(--background-color); min-height: calc(100vh - 120px); display: flex; flex-direction: column; justify-content: center;}
+        #home-welcome-content .app-container { width: 90%; max-width: 1100px; margin: 0 auto; padding: 0 15px; }
+        #home-welcome-content h1 { color: var(--primary-color); font-size: 2.8rem; margin-bottom: 1rem; }
+        #home-welcome-content p { font-size: 1.2rem; color: #555; margin-bottom: 2rem; }
+        #home-welcome-content .welcome-icon { font-size: 6rem; color: var(--accent-color); margin-bottom: 2rem; }
+        #home-welcome-content .cta-text { font-size: 1.1rem; color: var(--text-color); }
+        #home-welcome-content .cta-text .fa-arrow-up { margin: 0 5px; animation: bounceArrow 1.5s infinite; }
+        @keyframes bounceArrow { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-8px);} 60% {transform: translateY(-4px);} }
+
+        /* --- Love Calculator Styles (Original FunSpark) --- */
+        #love-calculator-page { background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8); min-height: calc(100vh - 70px); animation: loveGradientShift 6s ease-in-out infinite; padding: 2rem 1rem; width: 100%; }
+        @keyframes loveGradientShift { 0%,100%{background:linear-gradient(135deg,#ff6b6b,#ff8e8e,#ffa8a8)}50%{background:linear-gradient(135deg,#ff8e8e,#ffa8a8,#ff6b6b)} }
+        #love-calculator-page .love-calc-container { background: rgba(255,255,255,0.95); border-radius:20px; padding:2rem; box-shadow:0 20px 40px rgba(0,0,0,0.1); backdrop-filter:blur(10px); max-width:500px; width:100%; text-align:center; animation:loveFloat 3s ease-in-out infinite }
+        @keyframes loveFloat { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
+        #love-calculator-page .title { font-size:2.5rem; color:#e74c3c; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1) }
+        #love-calculator-page .subtitle { color:#7f8c8d; margin-bottom:2rem; font-size:1.1rem }
+        #love-calculator-page .input-group { margin-bottom:1.5rem; text-align:left }
+        #love-calculator-page .input-group label { display:block; color:#2c3e50; font-weight:700; margin-bottom:.5rem; font-size:1.1rem }
+        #love-calculator-page .input-group input { width:100%; padding:1rem; border:2px solid #ecf0f1; border-radius:15px; font-size:1.1rem; transition:all .3s ease; background:rgba(255,255,255,0.8) }
+        #love-calculator-page .input-group input:focus { outline:none; border-color:#e74c3c; transform:scale(1.02); box-shadow:0 5px 15px rgba(231,76,60,0.2) }
+        #love-calculator-page .calculate-btn { background:linear-gradient(45deg,#e74c3c,#c0392b); color:#fff; border:none; padding:1rem 2rem; font-size:1.2rem; border-radius:25px; cursor:pointer; transition:all .3s ease; margin:1rem 0; width:100%; position:relative; overflow:hidden }
+        #love-calculator-page .calculate-btn:hover { transform:translateY(-2px); box-shadow:0 10px 20px rgba(231,76,60,0.3) }
+        #love-calculator-page .result { margin-top:2rem; padding:1.5rem; background:linear-gradient(135deg,#fff,#f8f9fa); border-radius:15px; border-left:5px solid #e74c3c; display:none; animation:loveSlideIn .5s ease-out }
+        @keyframes loveSlideIn { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+        #love-calculator-page .love-percentage { font-size:3rem; font-weight:700; color:#e74c3c; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1) }
+        #love-calculator-page .love-message { font-size:1.2rem; color:#2c3e50; margin-bottom:1rem; font-weight:700 }
+        #love-calculator-page .shayari { background:linear-gradient(135deg,#ffeaa7,#fdcb6e); padding:1.5rem; border-radius:15px; margin-top:1rem; font-style:italic; font-size:1.1rem; line-height:1.6; color:#2d3436; border-left:4px solid #e17055 }
+        #love-calculator-page .hearts-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-1 }
+        #love-calculator-page .heart { position:absolute; color:#ff6b6b; font-size:20px; animation:loveFloatHeart 4s linear infinite }
+        @keyframes loveFloatHeart { 0%{transform:translateY(100vh) rotate(0);opacity:1}100%{transform:translateY(-100px) rotate(360deg);opacity:0} }
+
+        /* --- Friendship Calculator Styles --- */
+        #friendship-calculator-page { background: linear-gradient(135deg, #74b9ff, #0984e3, #6c5ce7); min-height: calc(100vh - 70px); animation: friendGradientShift 8s ease-in-out infinite; padding: 2rem 1rem; width: 100%; }
+        @keyframes friendGradientShift { 0%,100%{background:linear-gradient(135deg,#74b9ff,#0984e3,#6c5ce7)}33%{background:linear-gradient(135deg,#0984e3,#6c5ce7,#a29bfe)}66%{background:linear-gradient(135deg,#6c5ce7,#a29bfe,#74b9ff)} }
+        #friendship-calculator-page .friend-calc-container { background:rgba(255,255,255,0.95); border-radius:25px; padding:2.5rem; box-shadow:0 25px 50px rgba(0,0,0,0.15); backdrop-filter:blur(15px); max-width:550px; width:100%; text-align:center; animation:friendBounce 4s ease-in-out infinite }
+        @keyframes friendBounce { 0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-5px) rotate(.5deg)}75%{transform:translateY(-3px) rotate(-.5deg)} }
+        #friendship-calculator-page .title { font-size:2.8rem; background:linear-gradient(45deg,var(--friendship-primary),var(--friendship-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1); font-weight:700 }
+        #friendship-calculator-page .subtitle { color:#636e72; margin-bottom:2rem; font-size:1.2rem; font-weight:500 }
+        #friendship-calculator-page .friendship-icons { display:flex; justify-content:center; gap:1rem; margin:1rem 0; font-size:2rem }
+        #friendship-calculator-page .friendship-icons span { animation:friendWiggle 3s ease-in-out infinite }
+        @keyframes friendWiggle { 0%,100%{transform:rotate(0)}25%{transform:rotate(5deg)}75%{transform:rotate(-5deg)} }
+        #friendship-calculator-page .input-group { margin-bottom:1.5rem; text-align:left }
+        #friendship-calculator-page .input-group label { display:block; color:#2d3436; font-weight:700; margin-bottom:.5rem; font-size:1.1rem }
+        #friendship-calculator-page .input-group input { width:100%; padding:1.2rem; border:3px solid #ddd6fe; border-radius:20px; font-size:1.1rem; transition:all .3s ease; background:rgba(255,255,255,0.9) }
+        #friendship-calculator-page .input-group input:focus { outline:none; border-color:var(--friendship-secondary); transform:scale(1.02); box-shadow:0 8px 25px rgba(108,92,231,0.2) }
+        #friendship-calculator-page .calculate-btn { background:linear-gradient(45deg,#74b9ff,var(--friendship-primary)); color:#fff; border:none; padding:1.2rem 2.5rem; font-size:1.3rem; border-radius:30px; cursor:pointer; transition:all .3s ease; margin:1.5rem 0; width:100%; font-weight:700; position:relative; overflow:hidden }
+        #friendship-calculator-page .calculate-btn:hover { transform:translateY(-3px); box-shadow:0 15px 30px rgba(116,185,255,0.4) }
+        #friendship-calculator-page .result { margin-top:2rem; padding:2rem; background:linear-gradient(135deg,#fff,#f1f2f6); border-radius:20px; border-left:6px solid var(--friendship-primary); display:none; animation:friendSlideUp .6s ease-out }
+        @keyframes friendSlideUp { from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)} }
+        #friendship-calculator-page .friendship-percentage { font-size:3.5rem; font-weight:700; background:linear-gradient(45deg,var(--friendship-primary),var(--friendship-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1) }
+        #friendship-calculator-page .friendship-message { font-size:1.3rem; color:#2d3436; margin-bottom:1.5rem; font-weight:700 }
+        #friendship-calculator-page .shayari { background:linear-gradient(135deg,#81ecec,#00cec9); padding:2rem; border-radius:20px; margin-top:1.5rem; font-style:italic; font-size:1.2rem; line-height:1.8; color:#2d3436; border-left:5px solid #00b894; font-weight:500 }
+        #friendship-calculator-page .stars-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-1 }
+        #friendship-calculator-page .star { position:absolute; color:#fdcb6e; font-size:25px; animation:friendFloatStar 5s linear infinite }
+        @keyframes friendFloatStar { 0%{transform:translateY(100vh) rotate(0);opacity:1}100%{transform:translateY(-150px) rotate(720deg);opacity:0} }
+
+        /* --- Papa Ka Pyaar Calculator Styles --- */
+        #papa-love-calculator-page { background: linear-gradient(135deg, #2d3436, #636e72, #74b9ff, #00cec9); min-height: calc(100vh - 70px); animation: fatherlyGradient 10s ease-in-out infinite; padding: 2rem 1rem; width: 100%; }
+        @keyframes fatherlyGradient { 0%,100%{background:linear-gradient(135deg,#2d3436,#636e72,#74b9ff,#00cec9)}25%{background:linear-gradient(135deg,#636e72,#74b9ff,#00cec9,#55a3ff)}50%{background:linear-gradient(135deg,#74b9ff,#00cec9,#55a3ff,#2d3436)}75%{background:linear-gradient(135deg,#00cec9,#55a3ff,#2d3436,#636e72)} }
+        #papa-love-calculator-page .papa-calc-container { background:rgba(255,255,255,0.95); border-radius:25px; padding:2.5rem; box-shadow:0 30px 60px rgba(0,0,0,0.2); backdrop-filter:blur(20px); max-width:580px; width:100%; text-align:center; animation:proudFloat 5s ease-in-out infinite; border:3px solid rgba(116,185,255,0.3) }
+        @keyframes proudFloat { 0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.02)} }
+        #papa-love-calculator-page .title { font-size:3rem; background:linear-gradient(45deg,var(--papa-love-primary),var(--papa-love-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1); font-weight:700 }
+        #papa-love-calculator-page .subtitle { color:#636e72; margin-bottom:2rem; font-size:1.3rem; font-weight:600 }
+        #papa-love-calculator-page .father-icons { display:flex; justify-content:center; gap:1.5rem; margin:1.5rem 0; font-size:2.5rem }
+        #papa-love-calculator-page .father-icons span { animation:papaWave 4s ease-in-out infinite }
+        @keyframes papaWave { 0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(10deg) scale(1.1)}75%{transform:rotate(-10deg) scale(.9)} }
+        #papa-love-calculator-page .input-group { margin-bottom:1.8rem; text-align:left }
+        #papa-love-calculator-page .input-group label { display:block; color:var(--papa-love-primary); font-weight:700; margin-bottom:.8rem; font-size:1.2rem }
+        #papa-love-calculator-page .input-group input, #papa-love-calculator-page .input-group select { width:100%; padding:1.3rem; border:3px solid #ddd6fe; border-radius:20px; font-size:1.1rem; transition:all .3s ease; background:rgba(255,255,255,0.9) }
+        #papa-love-calculator-page .input-group input:focus, #papa-love-calculator-page .input-group select:focus { outline:none; border-color:var(--papa-love-secondary); transform:scale(1.02); box-shadow:0 10px 30px rgba(116,185,255,0.3) }
+        #papa-love-calculator-page .calculate-btn { background:linear-gradient(45deg,var(--papa-love-primary),var(--papa-love-secondary)); color:#fff; border:none; padding:1.5rem 3rem; font-size:1.4rem; border-radius:35px; cursor:pointer; transition:all .3s ease; margin:2rem 0; width:100%; font-weight:700; position:relative; overflow:hidden }
+        #papa-love-calculator-page .calculate-btn:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(45,52,54,0.4) }
+        #papa-love-calculator-page .result { margin-top:2rem; padding:2.5rem; background:linear-gradient(135deg,#fff,#f1f2f6); border-radius:25px; border-left:8px solid var(--papa-love-secondary); display:none; animation:papaLoveReveal .8s ease-out }
+        @keyframes papaLoveReveal { from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)} }
+        #papa-love-calculator-page .papa-percentage { font-size:4rem; font-weight:700; background:linear-gradient(45deg,var(--papa-love-primary),var(--papa-love-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1.5rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1) }
+        #papa-love-calculator-page .papa-message { font-size:1.4rem; color:var(--papa-love-primary); margin-bottom:1.5rem; font-weight:700 }
+        #papa-love-calculator-page .shayari { background:linear-gradient(135deg,#a29bfe,#6c5ce7); padding:2.5rem; border-radius:25px; margin-top:2rem; font-style:italic; font-size:1.3rem; line-height:2; color:#fff; border-left:6px solid var(--papa-love-primary); font-weight:500; text-shadow:1px 1px 2px rgba(0,0,0,0.3) }
+        #papa-love-calculator-page .special-message { background:linear-gradient(135deg,#fdcb6e,#e17055); padding:1.5rem; border-radius:15px; margin-top:1rem; color:#fff; font-weight:700; font-size:1.1rem }
+        #papa-love-calculator-page .mustache-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-1 }
+        #papa-love-calculator-page .mustache-item { position:absolute; font-size:30px; animation:floatMustache 6s linear infinite }
+        @keyframes floatMustache { 0%{transform:translateY(100vh) rotate(0);opacity:1}100%{transform:translateY(-200px) rotate(360deg);opacity:0} }
+
+        /* --- Maa Ka Pyaar Calculator Styles --- */
+        #maa-love-calculator-page { background: linear-gradient(135deg, #fd79a8, #fdcb6e, #e17055, #a29bfe); min-height: calc(100vh - 70px); animation: motherlyGradient 10s ease-in-out infinite; padding: 2rem 1rem; width: 100%; }
+        @keyframes motherlyGradient { 0%,100%{background:linear-gradient(135deg,#fd79a8,#fdcb6e,#e17055,#a29bfe)}25%{background:linear-gradient(135deg,#fdcb6e,#e17055,#a29bfe,#fd79a8)}50%{background:linear-gradient(135deg,#e17055,#a29bfe,#fd79a8,#fdcb6e)}75%{background:linear-gradient(135deg,#a29bfe,#fd79a8,#fdcb6e,#e17055)} }
+        #maa-love-calculator-page .maa-calc-container { background:rgba(255,255,255,0.95); border-radius:25px; padding:2.5rem; box-shadow:0 30px 60px rgba(0,0,0,0.2); backdrop-filter:blur(20px); max-width:580px; width:100%; text-align:center; animation:maaGentleFloat 5s ease-in-out infinite; border:3px solid rgba(253,121,168,0.3) } 
+        @keyframes maaGentleFloat { 0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.02)} } 
+        #maa-love-calculator-page .title { font-size:3rem; background:linear-gradient(45deg,var(--maa-love-primary),var(--maa-love-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1); font-weight:700 }
+        #maa-love-calculator-page .subtitle { color:var(--maa-love-secondary); margin-bottom:2rem; font-size:1.3rem; font-weight:600 }
+        #maa-love-calculator-page .mother-icons { display:flex; justify-content:center; gap:1.5rem; margin:1.5rem 0; font-size:2.5rem }
+        #maa-love-calculator-page .mother-icons span { animation:maaWave 4s ease-in-out infinite }
+        @keyframes maaWave { 0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(10deg) scale(1.1)}75%{transform:rotate(-10deg) scale(.9)} }
+        #maa-love-calculator-page .input-group { margin-bottom:1.8rem; text-align:left }
+        #maa-love-calculator-page .input-group label { display:block; color:var(--maa-love-secondary); font-weight:700; margin-bottom:.8rem; font-size:1.2rem }
+        #maa-love-calculator-page .input-group input, #maa-love-calculator-page .input-group select { width:100%; padding:1.3rem; border:3px solid #ffeaa7; border-radius:20px; font-size:1.1rem; transition:all .3s ease; background:rgba(255,255,255,0.9) }
+        #maa-love-calculator-page .input-group input:focus, #maa-love-calculator-page .input-group select:focus { outline:none; border-color:var(--maa-love-primary); transform:scale(1.02); box-shadow:0 10px 30px rgba(253,121,168,0.3) }
+        #maa-love-calculator-page .calculate-btn { background:linear-gradient(45deg,var(--maa-love-primary),var(--maa-love-secondary)); color:#fff; border:none; padding:1.5rem 3rem; font-size:1.4rem; border-radius:35px; cursor:pointer; transition:all .3s ease; margin:2rem 0; width:100%; font-weight:700; position:relative; overflow:hidden }
+        #maa-love-calculator-page .calculate-btn:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(253,121,168,0.4) }
+        #maa-love-calculator-page .result { margin-top:2rem; padding:2.5rem; background:linear-gradient(135deg,#fff,#ffeaa7); border-radius:25px; border-left:8px solid var(--maa-love-primary); display:none; animation:maaLoveReveal .8s ease-out }
+        @keyframes maaLoveReveal { from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)} }
+        #maa-love-calculator-page .maa-percentage { font-size:4rem; font-weight:700; background:linear-gradient(45deg,var(--maa-love-primary),var(--maa-love-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1.5rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1) }
+        #maa-love-calculator-page .maa-message { font-size:1.4rem; color:var(--maa-love-secondary); margin-bottom:1.5rem; font-weight:700 }
+        #maa-love-calculator-page .shayari { background:linear-gradient(135deg,var(--maa-love-primary),#fdcb6e); padding:2.5rem; border-radius:25px; margin-top:2rem; font-style:italic; font-size:1.3rem; line-height:2; color:#fff; border-left:6px solid var(--maa-love-secondary); font-weight:500; text-shadow:1px 1px 2px rgba(0,0,0,0.3) }
+        #maa-love-calculator-page .special-message { background:linear-gradient(135deg,var(--maa-love-primary),#a29bfe); padding:1.5rem; border-radius:15px; margin-top:1rem; color:#fff; font-weight:700; font-size:1.1rem }
+        #maa-love-calculator-page .flowers-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-1 }
+        #maa-love-calculator-page .flower-item { position:absolute; font-size:30px; animation:maaFloatFlower 6s linear infinite } 
+        @keyframes maaFloatFlower { 0%{transform:translateY(100vh) rotate(0);opacity:1}100%{transform:translateY(-200px) rotate(360deg);opacity:0} } 
+
+        /* --- Sibling Love Calculator Styles --- */
+        #sibling-love-calculator-page { background: linear-gradient(135deg, #74b9ff, #fd79a8, #fdcb6e, #00b894); min-height: calc(100vh - 70px); animation: siblingGradient 12s ease-in-out infinite; padding: 2rem 1rem; width: 100%; }
+        @keyframes siblingGradient { 0%,100%{background:linear-gradient(135deg,#74b9ff,#fd79a8,#fdcb6e,#00b894)}25%{background:linear-gradient(135deg,#fd79a8,#fdcb6e,#00b894,#74b9ff)}50%{background:linear-gradient(135deg,#fdcb6e,#00b894,#74b9ff,#fd79a8)}75%{background:linear-gradient(135deg,#00b894,#74b9ff,#fd79a8,#fdcb6e)} }
+        #sibling-love-calculator-page .sibling-calc-container { background:rgba(255,255,255,0.95); border-radius:25px; padding:2.5rem; box-shadow:0 30px 60px rgba(0,0,0,0.2); backdrop-filter:blur(20px); max-width:580px; width:100%; text-align:center; animation:siblingGentleFloat 6s ease-in-out infinite; border:3px solid rgba(116,185,255,0.3) }
+        @keyframes siblingGentleFloat { 0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.02)} }
+        #sibling-love-calculator-page .title { font-size:3rem; background:linear-gradient(45deg,var(--sibling-love-primary),var(--sibling-love-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1); font-weight:700 }
+        #sibling-love-calculator-page .subtitle { color:#0984e3; margin-bottom:2rem; font-size:1.3rem; font-weight:600 }
+        #sibling-love-calculator-page .sibling-icons { display:flex; justify-content:center; gap:1.5rem; margin:1.5rem 0; font-size:2.5rem }
+        #sibling-love-calculator-page .sibling-icons span { animation:siblingWave 4s ease-in-out infinite }
+        @keyframes siblingWave { 0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(15deg) scale(1.1)}75%{transform:rotate(-15deg) scale(.9)} }
+        #sibling-love-calculator-page .relationship-type { display:flex; gap:1rem; justify-content:center; margin-bottom:1.5rem }
+        #sibling-love-calculator-page .relationship-btn { padding:.8rem 1.5rem; border:2px solid var(--sibling-love-primary); background:#fff; color:var(--sibling-love-primary); border-radius:20px; cursor:pointer; transition:all .3s ease; font-weight:700 }
+        #sibling-love-calculator-page .relationship-btn.active { background:var(--sibling-love-primary); color:#fff }
+        #sibling-love-calculator-page .relationship-btn:hover { transform:scale(1.05) }
+        #sibling-love-calculator-page .input-group { margin-bottom:1.8rem; text-align:left }
+        #sibling-love-calculator-page .input-group label { display:block; color:#0984e3; font-weight:700; margin-bottom:.8rem; font-size:1.2rem }
+        #sibling-love-calculator-page .input-group input, #sibling-love-calculator-page .input-group select { width:100%; padding:1.3rem; border:3px solid #81ecec; border-radius:20px; font-size:1.1rem; transition:all .3s ease; background:rgba(255,255,255,0.9) }
+        #sibling-love-calculator-page .input-group input:focus, #sibling-love-calculator-page .input-group select:focus { outline:none; border-color:var(--sibling-love-primary); transform:scale(1.02); box-shadow:0 10px 30px rgba(116,185,255,0.3) }
+        #sibling-love-calculator-page .calculate-btn { background:linear-gradient(45deg,var(--sibling-love-primary),var(--sibling-love-secondary)); color:#fff; border:none; padding:1.5rem 3rem; font-size:1.4rem; border-radius:35px; cursor:pointer; transition:all .3s ease; margin:2rem 0; width:100%; font-weight:700; position:relative; overflow:hidden }
+        #sibling-love-calculator-page .calculate-btn:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(116,185,255,0.4) }
+        #sibling-love-calculator-page .result { margin-top:2rem; padding:2.5rem; background:linear-gradient(135deg,#fff,#81ecec); border-radius:25px; border-left:8px solid var(--sibling-love-primary); display:none; animation:siblingLoveReveal .8s ease-out }
+        @keyframes siblingLoveReveal { from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)} }
+        #sibling-love-calculator-page .sibling-percentage { font-size:4rem; font-weight:700; background:linear-gradient(45deg,var(--sibling-love-primary),var(--sibling-love-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:1.5rem; text-shadow:2px 2px 4px rgba(0,0,0,0.1) }
+        #sibling-love-calculator-page .sibling-message { font-size:1.4rem; color:#0984e3; margin-bottom:1.5rem; font-weight:700 }
+        #sibling-love-calculator-page .shayari { background:linear-gradient(135deg,var(--sibling-love-primary),#fdcb6e); padding:2.5rem; border-radius:25px; margin-top:2rem; font-style:italic; font-size:1.3rem; line-height:2; color:#fff; border-left:6px solid #0984e3; font-weight:500; text-shadow:1px 1px 2px rgba(0,0,0,0.3) }
+        #sibling-love-calculator-page .special-message { background:linear-gradient(135deg,var(--sibling-love-primary),#00b894); padding:1.5rem; border-radius:15px; margin-top:1rem; color:#fff; font-weight:700; font-size:1.1rem }
+        #sibling-love-calculator-page .hearts-sibling-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:-1 }
+        #sibling-love-calculator-page .heart-item { position:absolute; font-size:30px; animation:floatHeartSibling 6s linear infinite }
+        @keyframes floatHeartSibling { 0%{transform:translateY(100vh) rotate(0);opacity:1}100%{transform:translateY(-200px) rotate(360deg);opacity:0} }
+
+        /* --- Prem Match Maker Styles (NEW) --- */
+        #prem-match-maker-page {
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #ff9ff3, #54a0ff);
+            min-height: calc(100vh - 70px);
+            animation: premRomanticGradient 12s ease-in-out infinite;
+            padding: 2rem 1rem;
+            width: 100%;
+        }
+        @keyframes premRomanticGradient { 
+            0%, 100% { background: linear-gradient(135deg, #ff6b6b, #feca57, #ff9ff3, #54a0ff); }
+            25% { background: linear-gradient(135deg, #feca57, #ff9ff3, #54a0ff, #ff6b6b); }
+            50% { background: linear-gradient(135deg, #ff9ff3, #54a0ff, #ff6b6b, #feca57); }
+            75% { background: linear-gradient(135deg, #54a0ff, #ff6b6b, #feca57, #ff9ff3); }
+        }
+        #prem-match-maker-page .prem-container { 
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            max-width: 650px;
+            width:100%; 
+            text-align: center;
+            animation: premGentleFloat 6s ease-in-out infinite; 
+            border: 3px solid rgba(255, 107, 107, 0.3);
+        }
+        @keyframes premGentleFloat { 
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+        #prem-match-maker-page .prem-title { 
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        #prem-match-maker-page .prem-subtitle { 
+            color: #ff6b6b;
+            margin-bottom: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        #prem-match-maker-page .prem-love-icons { 
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            font-size: 2.5rem;
+        }
+        #prem-match-maker-page .prem-love-icons span {
+            animation: premLoveWave 4s ease-in-out infinite; 
+        }
+        @keyframes premLoveWave { 
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(15deg) scale(1.2); }
+            50% { transform: rotate(0deg) scale(1); }
+            75% { transform: rotate(-15deg) scale(1.2); }
+        }
+        #prem-match-maker-page .prem-input-group { 
+            margin-bottom: 1.8rem;
+            text-align: left; 
+        }
+        #prem-match-maker-page .prem-input-group label {
+            display: block;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+        #prem-match-maker-page .prem-input-group input,
+        #prem-match-maker-page .prem-input-group select {
+            width: 100%;
+            padding: 1.3rem;
+            border: 3px solid #feca57;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        #prem-match-maker-page .prem-input-group input:focus,
+        #prem-match-maker-page .prem-input-group select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+        #prem-match-maker-page .prem-calculate-btn { 
+            background: linear-gradient(45deg, #ff6b6b, #ff9ff3);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.4rem;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 2rem 0 0.5rem 0;
+            width: 100%;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        #prem-match-maker-page .prem-calculate-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4);
+        }
+        #prem-match-maker-page .prem-calculate-btn:active {
+            transform: translateY(0);
+        }
+        #prem-match-maker-page .prem-result { 
+            margin-top: 2rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, #fff, #fdf0da);
+            border-radius: 25px;
+            border-left: 8px solid #ff6b6b;
+            display: none;
+            animation: premLoveReveal 0.8s ease-out; 
+        }
+        @keyframes premLoveReveal { 
+            from { opacity: 0; transform: translateY(40px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #prem-match-maker-page .prem-love-percentage { 
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #prem-match-maker-page .prem-love-message { 
+            font-size: 1.4rem;
+            color: #ff6b6b;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+        #prem-match-maker-page .prem-special-message { 
+            background: linear-gradient(135deg, #ff6b6b, #54a0ff);
+            padding: 1.2rem;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        #prem-match-maker-page .prem-shayari { 
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-top: 1.5rem;
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: white;
+            border-left: 6px solid #ff9ff3;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        #prem-match-maker-page .prem-tips-section { 
+            background: linear-gradient(135deg, #ff9ff3, #54a0ff);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            color: white;
+        }
+        #prem-match-maker-page .prem-tips-title { 
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        #prem-match-maker-page .prem-tip { 
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 15px;
+            border-left: 4px solid #feca57;
+            font-size: 1rem;
+        }
+        #prem-match-maker-page .prem-gifts-section { 
+            background: linear-gradient(135deg, #54a0ff, #5f27cd);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            color: white;
+        }
+        #prem-match-maker-page .prem-gifts-title { 
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        #prem-match-maker-page .prem-gift-item { 
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        #prem-match-maker-page .prem-gift-emoji { font-size: 1.5rem; }
+        #prem-match-maker-page .prem-gift-details { text-align: left; }
+        #prem-match-maker-page .prem-gift-name { font-weight: bold; font-size: 1.1rem; }
+        #prem-match-maker-page .prem-gift-desc { font-size: 0.9rem; opacity: 0.8; }
+        #prem-match-maker-page .prem-flowers-container { 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+        #prem-match-maker-page .prem-flower-item { 
+            position: absolute;
+            font-size: 30px;
+            animation: premFloatFlower 8s linear infinite; 
+            opacity: 0.7;
+        }
+        @keyframes premFloatFlower { 
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- Shayari Generator Styles (NEW) --- */
+        #shayari-generator-page {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+            min-height: calc(100vh - 70px);
+            /* display: flex; is already on .page-content.active */
+            align-items: center;
+            justify-content: center;
+            animation: sgDynamicGradient 15s ease-in-out infinite;
+            padding: 2rem 1rem; 
+            width: 100%;
+            overflow: hidden; /* To contain absolute positioned emojis */
+        }
+
+        @keyframes sgDynamicGradient {
+            0%, 100% { background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c); }
+            25% { background: linear-gradient(135deg, #764ba2, #f093fb, #f5576c, #667eea); }
+            50% { background: linear-gradient(135deg, #f093fb, #f5576c, #667eea, #764ba2); }
+            75% { background: linear-gradient(135deg, #f5576c, #667eea, #764ba2, #f093fb); }
+        }
+
+        #shayari-generator-page .sg-container { 
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 2.5rem;
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            max-width: 700px;
+            width: 100%; 
+            text-align: center;
+            animation: sgFloatAnimation 8s ease-in-out infinite;
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            position: relative; /* For z-index stacking context with emojis */
+            z-index: 1; 
+        }
+
+        @keyframes sgFloatAnimation {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(0.5deg); }
+            66% { transform: translateY(10px) rotate(-0.5deg); }
+        }
+
+        #shayari-generator-page .sg-title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #667eea, #f5576c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        #shayari-generator-page .sg-subtitle {
+            color: #764ba2;
+            margin-bottom: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        #shayari-generator-page .sg-relation-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0 2.5rem;
+            font-size: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        #shayari-generator-page .sg-relation-icons span {
+            animation: sgBounceIcon 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        #shayari-generator-page .sg-relation-icons span:hover {
+            transform: scale(1.3);
+            color: #f5576c;
+        }
+
+        @keyframes sgBounceIcon {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.1); }
+        }
+
+        #shayari-generator-page .sg-input-group {
+            margin-bottom: 1.8rem;
+        }
+
+        #shayari-generator-page .sg-input-group label {
+            display: block;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            text-align: left; 
+        }
+
+        #shayari-generator-page .sg-input-group input, 
+        #shayari-generator-page .sg-input-group select {
+            width: 100%;
+            padding: 1.2rem;
+            border: 3px solid #f093fb;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.9);
+            outline: none;
+            font-family: 'Arial', 'Noto Sans Devanagari', sans-serif; 
+        }
+        #shayari-generator-page .sg-input-group select option {
+             font-family: 'Arial', 'Noto Sans Devanagari', sans-serif;
+        }
+
+
+        #shayari-generator-page .sg-input-group input:focus, 
+        #shayari-generator-page .sg-input-group select:focus {
+            border-color: #667eea;
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.25);
+        }
+
+        #shayari-generator-page .sg-generate-btn {
+            background: linear-gradient(45deg, #667eea, #f5576c);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.3rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 1.5rem 0 2rem;
+            width: 100%;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #shayari-generator-page .sg-generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease-out;
+        }
+
+        #shayari-generator-page .sg-generate-btn:hover::before { left: 100%; }
+        #shayari-generator-page .sg-generate-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.35);
+        }
+        #shayari-generator-page .sg-generate-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.25);
+        }
+
+        #shayari-generator-page .sg-result { 
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #ffffff, #f8f9ff);
+            border-radius: 30px;
+            border-left: 10px solid #667eea;
+            display: none;
+            animation: sgResultReveal 0.8s ease-out;
+            text-align: left;
+        }
+
+        @keyframes sgResultReveal {
+            from { opacity: 0; transform: translateY(40px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        #shayari-generator-page .sg-result h2, 
+        #shayari-generator-page .sg-result h3 {
+             text-align: center;
+             margin-bottom: 1.5rem;
+             font-weight: bold;
+        }
+
+        #shayari-generator-page .sg-relation-title {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #667eea, #f5576c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center; 
+        }
+
+        #shayari-generator-page .sg-names-display {
+            font-size: 1.8rem;
+            color: #764ba2;
+            font-weight: bold;
+            text-align: center; 
+            margin-bottom: 1rem;
+        }
+
+        #shayari-generator-page .sg-shayari-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1.8rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            color: white;
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            border-left: 8px solid #f093fb;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        #shayari-generator-page .sg-jokes-section, 
+        #shayari-generator-page .sg-fun-facts-section {
+            padding: 1.8rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            color: white;
+        }
+        #shayari-generator-page .sg-jokes-section { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        #shayari-generator-page .sg-fun-facts-section { background: linear-gradient(135deg, #764ba2, #667eea); }
+
+        #shayari-generator-page .sg-jokes-title, 
+        #shayari-generator-page .sg-fun-facts-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
+        #shayari-generator-page .sg-joke-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 15px;
+            border-left: 5px solid #ffffff;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        #shayari-generator-page .sg-fun-fact-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        #shayari-generator-page .sg-fact-emoji { font-size: 1.8rem; }
+        #shayari-generator-page .sg-fact-text { font-size: 1.05rem; line-height: 1.5; }
+
+        #shayari-generator-page .sg-floating-emojis { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 0; 
+        }
+
+        #shayari-generator-page .sg-emoji-item {
+            position: absolute;
+            animation: sgFloatEmoji 10s linear infinite;
+            opacity: 0; 
+            will-change: transform, opacity;
+        }
+
+        @keyframes sgFloatEmoji {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.7; }
+            20% { opacity: 0.7; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Responsive for Shayari Generator */
+        @media (max-width: 768px) {
+            #shayari-generator-page .sg-title { font-size: 2.2rem; }
+            #shayari-generator-page .sg-subtitle { font-size: 1.1rem; }
+            #shayari-generator-page .sg-relation-icons { gap: 1rem; font-size: 2rem; }
+            #shayari-generator-page .sg-container { padding: 1.5rem; }
+            #shayari-generator-page .sg-input-group label { font-size: 1.1rem; }
+            #shayari-generator-page .sg-input-group input, #shayari-generator-page .sg-input-group select { padding: 1rem; font-size: 1rem; }
+            #shayari-generator-page .sg-generate-btn { padding: 1.2rem 2.5rem; font-size: 1.1rem; }
+            #shayari-generator-page .sg-result { padding: 1.5rem; }
+            #shayari-generator-page .sg-relation-title { font-size: 1.8rem; }
+            #shayari-generator-page .sg-names-display { font-size: 1.5rem; }
+            #shayari-generator-page .sg-shayari-section { padding: 1.5rem; font-size: 1.1rem; }
+            #shayari-generator-page .sg-jokes-section, #shayari-generator-page .sg-fun-facts-section { padding: 1.5rem; }
+            #shayari-generator-page .sg-jokes-title, #shayari-generator-page .sg-fun-facts-title { font-size: 1.4rem; }
+            #shayari-generator-page .sg-joke-item, #shayari-generator-page .sg-fun-fact-item { padding: 0.8rem; font-size: 1rem; }
+            #shayari-generator-page .sg-fact-emoji { font-size: 1.5rem; }
+            #shayari-generator-page .sg-fact-text { font-size: 1rem; }
+        }
+        @media (max-width: 480px) {
+            #shayari-generator-page .sg-title { font-size: 1.8rem; }
+            #shayari-generator-page .sg-relation-icons { font-size: 1.8rem; gap: 0.8rem; }
+        }
+
+
+        /* Placeholder for other features */
+        .placeholder-page-container { background-color:var(--surface-color); padding:3rem 2rem; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.08); max-width:600px; width:90%; text-align:center; margin-top:2rem }
+        .placeholder-page-container .placeholder-icon { font-size:4rem; margin-bottom:1.5rem; color:var(--accent-color) }
+        .placeholder-page-container.family-theme .placeholder-icon { color:var(--family-love-primary) }
+        .placeholder-page-container h2 { color:var(--primary-color); margin-bottom:1rem; font-size:2rem }
+        .placeholder-page-container p { color:#555; font-size:1.1rem; line-height:1.7 }
+
+        /* Share Button Style */
+        .share-result-btn {
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            color: var(--light-text-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all .3s ease;
+            margin-top: 1.5rem;
+            display: inline-block;
+            font-weight: 600;
+        }
+        .share-result-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .share-result-btn .fa-share-alt {
+            margin-right: 8px;
+        }
+
+        /* Footer */
+        footer { background-color:#343a40; color:var(--light-text-color); text-align:center; padding:1.5rem 0; font-size:.9rem; margin-top:auto }
+        footer .app-container { width:90%; max-width:1100px; margin:0 auto; padding:0 15px }
+        footer .fa-heart { color:var(--secondary-color) }
+
+        /* Responsive */
+        @media(max-width:768px){.header-content{padding:0 10px}.logo{font-size:1.6rem}.features-menu-btn{padding:.5rem 1rem;font-size:.9rem}.features-dropdown{min-width:200px}#home-welcome-content h1{font-size:2.2rem}#love-calculator-page .title,#friendship-calculator-page .title,#papa-love-calculator-page .title,#maa-love-calculator-page .title,#sibling-love-calculator-page .title,#prem-match-maker-page .prem-title{font-size:2rem}}
+        @media(max-width:480px){.logo{font-size:1.4rem}.features-menu-btn{padding:.4rem .8rem;font-size:.8rem}.features-menu-btn .fa-bars{margin-right:5px}.features-dropdown{right:0;transform:none}#love-calculator-page .love-calc-container,#friendship-calculator-page .friend-calc-container,#papa-love-calculator-page .papa-calc-container,#maa-love-calculator-page .maa-calc-container,#sibling-love-calculator-page .sibling-calc-container,#prem-match-maker-page .prem-container,.placeholder-page-container,#shayari-generator-page .sg-container{padding:1.5rem}}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo" id="logo-btn">FunSpark <i class="fas fa-grin-hearts"></i></div>
+            <nav class="nav-menu">
+                <button class="features-menu-btn" id="features-menu-toggle-btn">
+                    <i class="fas fa-bars"></i> विशेषताएँ
+                </button>
+                <div class="features-dropdown" id="features-dropdown-list">
+                    <a href="#" data-target="love-calculator-page"><i class="fas fa-heart-circle-check fa-fw"></i> लव कैलकुलेटर</a>
+                    <a href="#" data-target="prem-match-maker-page"><i class="fas fa-heart-pulse fa-fw"></i> प्रेम मैच मेकर</a>
+                    <a href="#" data-target="friendship-calculator-page"><i class="fas fa-handshake fa-fw"></i> फ्रेंडशिप कैलकुलेटर</a>
+                    <a href="#" data-target="papa-love-calculator-page"><i class="fas fa-male fa-fw"></i> पापा का प्यार</a>
+                    <a href="#" data-target="maa-love-calculator-page"><i class="fas fa-female fa-fw"></i> माँ का प्यार</a>
+                    <a href="#" data-target="sibling-love-calculator-page"><i class="fas fa-users fa-fw"></i> भाई-बहन का प्यार</a>
+                    <a href="#" data-target="shayari-generator-page"><i class="fas fa-feather-alt fa-fw"></i> शायरी जेनरेटर</a>
+                    <a href="#" data-target="fun-quiz-page"><i class="fas fa-puzzle-piece fa-fw"></i> मजेदार क्विज़</a>
+                    <a href="#" id="share-app-btn" data-target="share-app-action"><i class="fas fa-share-alt fa-fw"></i> ऐप शेयर करें</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Default Welcome Content -->
+        <div id="home-welcome-content" class="page-content active">
+            <div class="app-container">
+                <i class="fas fa-smile-beam welcome-icon"></i>
+                <h1>FunSpark में आपका स्वागत है!</h1>
+                <p>ऊपर दाहिने कोने में "विशेषताएँ" मेनू से अपनी पसंदीदा गतिविधि चुनें।</p>
+                <p class="cta-text">आइए, कुछ मज़ा करें! <i class="fas fa-arrow-up"></i></p>
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>Animated Arrow</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .arrow-bounce {
+      animation: bounce 1s infinite;
+      font-size: 40px;
+      color: #333;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(10px); /* नीचे की ओर 10px */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <i class="fas fa-arrow-down arrow-bounce"></i>
+
+</body>
+</html>
+
+
+
+            </div>
+        </div>
+
+        <!-- Love Calculator Page (Original FunSpark) -->
+        <div id="love-calculator-page" class="page-content">
+            <div class="hearts-container" id="love-hearts-container"></div>
+            <div class="love-calc-container">
+                <h1 class="title">💕 Love Calculator 💕</h1><p class="subtitle">प्यार का सच्चा प्रतिशत जानें</p>
+                <div class="input-group"><label for="boy-name">लड़के का नाम 👦</label><input type="text" id="boy-name" placeholder="यहाँ लड़के का नाम लिखें..."></div>
+                <div class="input-group"><label for="girl-name">लड़की का नाम 👧</label><input type="text" id="girl-name" placeholder="यहाँ लड़की का नाम लिखें..."></div>
+                <button class="calculate-btn" id="love-calculate-btn">💖 प्यार कैलकुलेट करें 💖</button>
+                <div class="result" id="love-result">
+                    <div class="love-percentage" id="love-percentage-display"></div>
+                    <div class="love-message" id="love-message-display"></div>
+                    <div class="shayari" id="love-shayari-display"></div>
+                    <button class="share-result-btn" id="share-love-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Prem Match Maker Page (NEW) -->
+        <div id="prem-match-maker-page" class="page-content">
+            <div class="prem-flowers-container" id="prem-flowers-container"></div>
+            <div class="prem-container">
+                <h1 class="prem-title">💕 प्रेम मैच मेकर 💕</h1>
+                <p class="prem-subtitle">आपके प्यार की सच्चाई जानें</p>
+                
+                <div class="prem-love-icons">
+                    <span style="animation-delay: 0s;">💑</span>
+                    <span style="animation-delay: 0.5s;">❤️</span>
+                    <span style="animation-delay: 1s;">💍</span>
+                    <span style="animation-delay: 1.5s;">👫</span>
+                </div>
+                
+                <div class="prem-input-group">
+                    <label for="prem-boy-name">लड़के का नाम 👨</label>
+                    <input type="text" id="prem-boy-name" placeholder="यहाँ अपना नाम लिखें...">
+                </div>
+                
+                <div class="prem-input-group">
+                    <label for="prem-girl-name">लड़की का नाम 👩</label>
+                    <input type="text" id="prem-girl-name" placeholder="यहाँ अपने साथी का नाम लिखें...">
+                </div>
+                
+                <div class="prem-input-group">
+                    <label for="prem-relationship-status">रिश्ते की स्थिति</label>
+                    <select id="prem-relationship-status">
+                        <option value="dating">डेटिंग कर रहे हैं 💕</option>
+                        <option value="engaged">एंगेज्ड हैं 💍</option>
+                        <option value="married">शादीशुदा हैं 👰‍♀️🤵‍♂️</option>
+                        <option value="crush">क्रश है 😍</option>
+                        <option value="just_friends">बस दोस्त हैं 🤔</option>
+                        <option value="complicated">उलझा हुआ है 😕</option>
+                    </select>
+                </div>
+                
+                <button class="prem-calculate-btn" id="prem-calculate-btn">
+                    💖 प्रेम कैलकुलेट करें 💖
+                </button>
+                
+                <div class="prem-result" id="prem-result-display">
+                    <div class="prem-love-percentage" id="prem-percentage-display"></div>
+                    <div class="prem-love-message" id="prem-message-display"></div>
+                    <div class="prem-special-message" id="prem-special-message-display"></div>
+                    <div class="prem-shayari" id="prem-shayari-display"></div>
+                    
+                    <div class="prem-tips-section" id="prem-tips-section">
+                        <div class="prem-tips-title">💡 प्यार बढ़ाने के टिप्स</div>
+                        <div id="prem-tips-content"></div>
+                    </div>
+                    
+                    <div class="prem-gifts-section" id="prem-gifts-section">
+                        <div class="prem-gifts-title">🎁 रोमांटिक गिफ्ट आइडियाज</div>
+                        <div id="prem-gifts-content"></div>
+                    </div>
+                    <button class="share-result-btn" id="share-prem-match-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Friendship Calculator Page -->
+        <div id="friendship-calculator-page" class="page-content">
+            <div class="stars-container" id="friendship-stars-container"></div>
+            <div class="friend-calc-container">
+                <h1 class="title">🤝 Friendship Calculator 🤝</h1><p class="subtitle">सच्ची दोस्ती का प्रतिशत जानें</p>
+                <div class="friendship-icons"><span style="animation-delay:0s">👫</span><span style="animation-delay:.5s">🤜</span><span style="animation-delay:1s">🤛</span><span style="animation-delay:1.5s">👬</span></div>
+                <div class="input-group"><label for="friend1-name">पहले दोस्त का नाम 👤</label><input type="text" id="friend1-name" placeholder="यहाँ पहला नाम लिखें..."></div>
+                <div class="input-group"><label for="friend2-name">दूसरे दोस्त का नाम 👤</label><input type="text" id="friend2-name" placeholder="यहाँ दूसरा नाम लिखें..."></div>
+                <button class="calculate-btn" id="friendship-calculate-btn">🌟 दोस्ती कैलकुलेट करें 🌟</button>
+                <div class="result" id="friendship-result">
+                    <div class="friendship-percentage" id="friendship-percentage-display"></div>
+                    <div class="friendship-message" id="friendship-message-display"></div>
+                    <div class="shayari" id="friendship-shayari-display"></div>
+                    <button class="share-result-btn" id="share-friendship-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Papa Ka Pyaar Calculator Page -->
+        <div id="papa-love-calculator-page" class="page-content">
+            <div class="mustache-container" id="papa-mustache-container"></div>
+            <div class="papa-calc-container">
+                <h1 class="title">👨 Papa Ka Pyaar 👨</h1> <p class="subtitle">पिता के प्रेम का सच्चा प्रतिशत जानें</p>
+                <div class="father-icons"><span style="animation-delay:0s">👨‍👧</span><span style="animation-delay:.5s">👨‍👦</span><span style="animation-delay:1s">💪</span><span style="animation-delay:1.5s">❤️</span></div>
+                <div class="input-group"><label for="papa-name">पिता जी का नाम 👨</label><input type="text" id="papa-name" placeholder="यहाँ पापा का नाम लिखें..."></div>
+                <div class="input-group"><label for="papa-child-name">बच्चे का नाम 👶</label><input type="text" id="papa-child-name" placeholder="यहाँ बच्चे का नाम लिखें..."></div>
+                <div class="input-group"><label for="papa-child-type">बच्चे का प्रकार</label><select id="papa-child-type"><option value="beta">बेटा 👦</option><option value="beti">बेटी 👧</option></select></div>
+                <button class="calculate-btn" id="papa-love-calculate-btn">💖 पापा का प्यार कैलकुलेट करें 💖</button>
+                <div class="result" id="papa-love-result">
+                    <div class="papa-percentage" id="papa-love-percentage-display"></div>
+                    <div class="papa-message" id="papa-love-message-display"></div>
+                    <div class="shayari" id="papa-love-shayari-display"></div>
+                    <div class="special-message" id="papa-love-special-message"></div>
+                    <button class="share-result-btn" id="share-papa-love-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Maa Ka Pyaar Calculator Page -->
+        <div id="maa-love-calculator-page" class="page-content">
+            <div class="flowers-container" id="maa-flowers-container"></div>
+            <div class="maa-calc-container">
+                 <h1 class="title">👩 माँ का प्यार 👩</h1><p class="subtitle">माता के प्रेम का सच्चा प्रतिशत जानें</p>
+                <div class="mother-icons"><span style="animation-delay:0s">👩‍👧</span><span style="animation-delay:.5s">👩‍👦</span><span style="animation-delay:1s">💕</span><span style="animation-delay:1.5s">🤱</span></div>
+                <div class="input-group"><label for="maa-name">माँ का नाम 👩</label><input type="text" id="maa-name" placeholder="यहाँ माँ का नाम लिखें..."></div>
+                <div class="input-group"><label for="maa-child-name">बच्चे का नाम 👶</label><input type="text" id="maa-child-name" placeholder="यहाँ बच्चे का नाम लिखें..."></div>
+                <div class="input-group"><label for="maa-child-type">बच्चे का प्रकार</label><select id="maa-child-type"><option value="beta">बेटा 👦</option><option value="beti">बेटी 👧</option></select></div>
+                <button class="calculate-btn" id="maa-love-calculate-btn">💖 माँ का प्यार कैलकुलेट करें 💖</button>
+                <div class="result" id="maa-love-result">
+                    <div class="maa-percentage" id="maa-love-percentage-display"></div>
+                    <div class="maa-message" id="maa-love-message-display"></div>
+                    <div class="shayari" id="maa-love-shayari-display"></div>
+                    <div class="special-message" id="maa-love-special-message"></div>
+                    <button class="share-result-btn" id="share-maa-love-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bhai Behen Ka Pyaar Calculator Page -->
+        <div id="sibling-love-calculator-page" class="page-content">
+            <div class="hearts-sibling-container" id="sibling-hearts-container"></div>
+            <div class="sibling-calc-container">
+                <h1 class="title">👫 भाई-बहन का प्यार 👬</h1><p class="subtitle">सिबलिंग लव का सच्चा प्रतिशत जानें</p>
+                <div class="sibling-icons"><span style="animation-delay:0s">👫</span><span style="animation-delay:.5s">👬</span><span style="animation-delay:1s">💝</span><span style="animation-delay:1.5s">👭</span></div>
+                <div class="relationship-type" id="sibling-relationship-type-selector">
+                    <button class="relationship-btn active" data-sibling-rel="bhai-behen">भाई-बहन 👫</button>
+                    <button class="relationship-btn" data-sibling-rel="bhai-bhai">भाई-भाई 👬</button>
+                    <button class="relationship-btn" data-sibling-rel="behen-behen">बहन-बहन 👭</button>
+                </div>
+                <div class="input-group"><label for="sibling-person1-name" id="sibling-person1-label">पहले भाई/बहन का नाम 👦</label><input type="text" id="sibling-person1-name" placeholder="यहाँ नाम लिखें..."></div>
+                <div class="input-group"><label for="sibling-person2-name" id="sibling-person2-label">दूसरे भाई/बहन का नाम 👧</label><input type="text" id="sibling-person2-name" placeholder="यहाँ नाम लिखें..."></div>
+                <div class="input-group"><label for="sibling-age-gap">उम्र का अंतर</label><select id="sibling-age-gap"><option value="1-2">1-2 साल</option><option value="3-5">3-5 साल</option><option value="6-10">6-10 साल</option><option value="10+">10+ साल</option></select></div>
+                <button class="calculate-btn" id="sibling-love-calculate-btn">💖 भाई-बहन का प्यार कैलकुलेट करें 💖</button>
+                <div class="result" id="sibling-love-result">
+                    <div class="sibling-percentage" id="sibling-love-percentage-display"></div>
+                    <div class="sibling-message" id="sibling-love-message-display"></div>
+                    <div class="shayari" id="sibling-love-shayari-display"></div>
+                    <div class="special-message" id="sibling-love-special-message"></div>
+                    <button class="share-result-btn" id="share-sibling-love-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shayari Generator Page (NEW) -->
+        <div id="shayari-generator-page" class="page-content">
+            <div class="sg-floating-emojis" id="sg-floating-emojis"></div>
+            <div class="sg-container">
+                <h1 class="sg-title">🎭 शायरी जेनरेटर 🎭</h1>
+                <p class="sg-subtitle">हर रिश्ते की मजेदार शायरी और जोक्स</p>
+                
+                <div class="sg-relation-icons">
+                    <span title="दोस्त">👫</span>
+                    <span title="प्रेमी">💕</span>
+                    <span title="परिवार">👨‍👩‍👧‍👦</span>
+                    <span title="भाई-बहन">👧‍👦</span>
+                    <span title="माता-पिता">👪</span>
+                    <span title="दादा-दादी">👴👵</span>
+                </div>
+                
+                <div class="sg-input-group">
+                    <label for="sg-first-name">पहला नाम 👤</label>
+                    <input type="text" id="sg-first-name" placeholder="पहला व्यक्ति का नाम लिखें...">
+                </div>
+                
+                <div class="sg-input-group">
+                    <label for="sg-second-name">दूसरा नाम 👤</label>
+                    <input type="text" id="sg-second-name" placeholder="दूसरे व्यक्ति का नाम लिखें...">
+                </div>
+                
+                <div class="sg-input-group">
+                    <label for="sg-relationship-type">रिश्ते का प्रकार</label>
+                    <select id="sg-relationship-type">
+                        <option value="friends">दोस्त 👯‍♂️</option>
+                        <option value="lovers">प्रेमी 💑</option>
+                        <option value="siblings">भाई-बहन 👫</option>
+                        <option value="parent-child">माता-पिता और बच्चे 👨‍👧</option>
+                        <option value="husband-wife">पति-पत्नी 💏</option>
+                        <option value="grandparent-grandchild">दादा-दादी और पोते 👴👧</option>
+                        <option value="cousins">चचेरे/ममेरे भाई-बहन 👨‍👨‍👧‍👦</option>
+                        <option value="colleagues">सहकर्मी 👔</option>
+                        <option value="neighbors">पड़ोसी 🏠</option>
+                        <option value="teacher-student">गुरु-शिष्य 👨‍🏫👨‍🎓</option>
+                    </select>
+                </div>
+                
+                <button class="sg-generate-btn" onclick="sg_generateContent()">
+                    ✨ शायरी और जोक्स जेनरेट करें ✨
+                </button>
+                
+                <div class="sg-result" id="sg-result">
+                    <h2 class="sg-relation-title" id="sg-relation-title"></h2>
+                    <p class="sg-names-display" id="sg-names-display"></p>
+                    
+                    <div class="sg-shayari-section" id="sg-shayari-section"></div>
+                    
+                    <div class="sg-jokes-section" id="sg-jokes-section-container">
+                        <h3 class="sg-jokes-title">😂 मजेदार जोक्स</h3>
+                        <div id="sg-jokes-content"></div>
+                    </div>
+                    
+                    <div class="sg-fun-facts-section" id="sg-fun-facts-section-container">
+                        <h3 class="sg-fun-facts-title">🎉 रोचक तथ्य</h3>
+                        <div id="sg-fun-facts-content"></div>
+                    </div>
+                    <button class="share-result-btn" id="share-sg-result-btn" style="display:none;"><i class="fas fa-share-alt"></i> परिणाम शेयर करें</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Placeholder Pages -->
+        <div id="fun-quiz-page" class="page-content"><div class="placeholder-page-container"><i class="fas fa-puzzle-piece placeholder-icon" style="color:#28a745"></i><h2>मजेदार क्विज़</h2><p>रोचक और मनोरंजक क्विज़ के साथ अपने ज्ञान का परीक्षण करें। यह सुविधा जल्द ही आ रही है!</p></div></div>
+    </main>
+
+    <footer><div class="app-container"><p>© FunSpark. मनोरंजन और मुस्कान के लिए <i class="fas fa-heart"></i> से बनाया गया    YADAV Sir !</p></div></footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const pageContents = document.querySelectorAll('.page-content');
+        const logoBtn = document.getElementById('logo-btn');
+        const featuresMenuToggleBtn = document.getElementById('features-menu-toggle-btn');
+        const featuresDropdownList = document.getElementById('features-dropdown-list');
+        const dropdownLinks = featuresDropdownList.querySelectorAll('a[data-target]');
+
+        async function shareContent(title, text, url) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title, text, url });
+                    console.log('Content shared successfully');
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                    try {
+                        await navigator.clipboard.writeText(text + (url ? `\n${url}` : ''));
+                        alert('टेक्स्ट क्लिपबोर्ड पर कॉपी हो गया! अब आप इसे कहीं भी पेस्ट कर सकते हैं। (शेयरिंग विफल)');
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                        prompt("कॉपी करने में विफल। इस टेक्स्ट को मैनुअली कॉपी करें:", text + (url ? `\n${url}` : ''));
+                    }
+                }
+            } else { 
+                try {
+                    await navigator.clipboard.writeText(text + (url ? `\n${url}` : ''));
+                    alert('टेक्स्ट क्लिपबोर्ड पर कॉपी हो गया! अब आप इसे कहीं भी पेस्ट कर सकते हैं।');
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    prompt("कॉपी करने में विफल। इस टेक्स्ट को मैनुअली कॉपी करें:", text + (url ? `\n${url}` : ''));
+                }
+            }
+        }
+        
+        function showPage(pageId) {
+            pageContents.forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.share-result-btn').forEach(btn => btn.style.display = 'none'); 
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo(0, 0);
+
+                // Call page-specific animation creators
+                const animationFunctionName = `create_${pageId.replace(/-/g, '_').replace('_page', '')}_animation`;
+                // MODIFICATION: Do not call animation for shayari generator here
+                if (pageId !== 'shayari-generator-page' && typeof window[animationFunctionName] === 'function') {
+                    setTimeout(window[animationFunctionName], 100); 
+                }
+            } else {
+                document.getElementById('home-welcome-content').classList.add('active');
+            }
+            featuresDropdownList.classList.remove('active');
+        }
+
+        showPage('home-welcome-content');
+        if (logoBtn) logoBtn.addEventListener('click', () => showPage('home-welcome-content'));
+        if (featuresMenuToggleBtn) featuresMenuToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); featuresDropdownList.classList.toggle('active'); });
+        
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = link.getAttribute('data-target');
+                if (target && target !== 'share-app-action') { 
+                    showPage(target);
+                }
+            });
+        });
+
+        const shareAppBtnInMenu = document.getElementById('share-app-btn');
+        if (shareAppBtnInMenu) {
+            shareAppBtnInMenu.addEventListener('click', (e) => {
+                e.preventDefault();
+                featuresDropdownList.classList.remove('active');
+                const appTitle = 'FunSpark - आपका मनोरंजन हब!';
+                const appText = 'FunSpark पर मज़ेदार कैलकुलेटर और गेम्स खेलें! 🎉 अभी देखें:';
+                const appUrl = window.location.href.split('#')[0]; 
+                shareContent(appTitle, appText, appUrl);
+            });
+        }
+
+        document.addEventListener('click', (e) => { 
+            if (featuresDropdownList.classList.contains('active') && 
+                !featuresMenuToggleBtn.contains(e.target) && 
+                !featuresDropdownList.contains(e.target)) {
+                featuresDropdownList.classList.remove('active');
+            }
+        });
+
+        // --- Love Calculator (Original FunSpark) ---
+        const loveCalcBtn = document.getElementById('love-calculate-btn');
+        const shareLoveBtn = document.getElementById('share-love-result-btn');
+        if (loveCalcBtn) {
+            const boyNameInput = document.getElementById('boy-name'); const girlNameInput = document.getElementById('girl-name');
+            const loveResultDiv = document.getElementById('love-result'); const lovePercDisp = document.getElementById('love-percentage-display');
+            const loveMsgDisp = document.getElementById('love-message-display'); const loveShayariDisp = document.getElementById('love-shayari-display');
+            const loveHeartsCont = document.getElementById('love-hearts-container');
+            const loveShayariTmpls = ["{boy} की {girl} से मुहब्बत है सच्ची,\nदिल की ये बात है कुछ कच्ची।\n{percentage}% प्यार का ये इज़हार,\nबना दे इनको एक-दूसरे के यार! 💕", "{girl} के बिना {boy} है अधूरा,\n{percentage}% प्यार का ये नूरा।\nदिल से दिल तक का ये रिश्ता,\nबन जाए इनका प्रेम का किस्सा! 💖", "{boy} और {girl} का प्यार निराला,\n{percentage}% मुहब्बत का ये जाला।\nखुदा करे ये जोड़ी रहे सलामत,\nमिले इन्हें प्रेम की हर नेमत! 🌹", "{girl} की आँखों में {boy} का प्यार,\n{percentage}% दिल का ये उपहार।\nजमाना देखे इनकी मुहब्बत,\nबना रहे ये प्रेम की सूरत! 💝", "{boy} के दिल में {girl} का वास,\n{percentage}% प्यार की ये आस।\nचाँद-सितारे हों इनके गवाह,\nमिले इन्हें प्रेम की राह! ✨", "{girl} की मुस्कान में {boy} खो जाता,\n{percentage}% प्रेम का जादू समाता।\nइश्क के इस खेल में दोनों हारे,\nमिल गए जिंदगी के सहारे! 💫", "{boy} कहता {girl} से प्यार की बात,\n{percentage}% दिल में छुपे एहसास।\nमोहब्बत की ये कहानी प्यारी,\nबन जाए इनकी खुशियों की सवारी! 🎭", "{girl} और {boy} का मेल अनोखा,\n{percentage}% प्रेम का ये भोला।\nदुनिया की नजरों से बचकर,\nप्यार करते रहें ये मचकर! 🌺", "{boy} की नजरों में {girl} का जलवा,\n{percentage}% इश्क का ये सिलसिला।\nप्रेम की ये कहानी रंगीली,\nहो जाए हमेशा के लिए खुशमिजाजी! 🎨", "{girl} के इंतजार में {boy} बैठा,\n{percentage}% प्यार में दिल पिघलता।\nमुहब्बत के इस रास्ते पर,\nमिले खुशियाँ हर कदम पर! 🛤️", "{boy} और {girl} की जोड़ी मस्त,\n{percentage}% प्रेम की फर्स्ट क्लास।\nप्यार में डूबे ये दोनों,\nबना लें सपनों का महल! 🏰", "{girl} की हंसी में {boy} का जमाना,\n{percentage}% इश्क का ये दीवाना।\nमोहब्बत की ये मिठास प्यारी,\nरहे हमेशा खुशियों की सारी! 🍯", "{boy} के ख्वाबों में {girl} आती,\n{percentage}% प्रेम की ये बात लाती।\nदिल की गहराई से निकला प्यार,\nबने इनका सुनहरा संसार! 🌅", "{girl} की मोहब्बत में {boy} दीवाना,\n{percentage}% इश्क का ये अफसाना।\nप्रेम के इस बंधन में बंधकर,\nजी लें जिंदगी को महकाकर! 🌸", "{boy} कहे {girl} तू है मेरी जान,\n{percentage}% प्यार की ये पहचान।\nइश्क की ये कहानी सुंदर,\nबना दे जीवन को और भी बेहतर! 💐", "{girl} के प्यार में {boy} खुश,\n{percentage}% मुहब्बत का ये जोश।\nदिलों की ये मुलाकात प्यारी,\nहो जाए हमेशा खुशियों की सारी! 🎪", "{boy} और {girl} का रिश्ता गहरा,\n{percentage}% प्रेम का ये लहरा।\nमोहब्बत के इस सफर में,\nमिले खुशियाँ हर पहर में! 🌊", "{girl} की याद में {boy} रो देता,\n{percentage}% इश्क में वो खो देता।\nप्यार की ये मंजिल सुहानी,\nबने इनकी प्रेम कहानी! 📖", "{boy} के दिल में {girl} का प्यार,\n{percentage}% मुहब्बत का उपहार।\nइश्क के इस खेल में दोनों जीते,\nमिल गए सपनों के मीते! 🎁", "{girl} और {boy} की प्रीत निराली,\n{percentage}% प्रेम की ये मिसाली।\nमोहब्बत का ये जादू चलता रहे,\nखुशियों का ये सिलसिला चलता रहे! ✨"];
+            const loveMsgs = [{min:80,max:100,message:"वाह! परफेक्ट मैच! 💕"},{min:60,max:79,message:"बहुत अच्छा जोड़ा! 💖"},{min:40,max:59,message:"अच्छी संभावनाएं हैं! 💝"},{min:20,max:39,message:"थोड़ी मेहनत की जरूरत! 💪"},{min:0,max:19,message:"दोस्ती बेहतर रहेगी! 😊"}];
+            function calcLove() { const bN=boyNameInput.value.trim(); const gN=girlNameInput.value.trim(); if(!bN||!gN){alert('कृपया दोनों नाम भरें! 💝'); shareLoveBtn.style.display = 'none'; return} const p=genLovePerc(bN,gN); const m=loveMsgs.find(msg=>p>=msg.min&&p<=msg.max).message; const s=genLoveShayari(bN,gN,p); lovePercDisp.textContent=p+'%'; loveMsgDisp.textContent=m; loveShayariDisp.innerHTML=s.replace(/\n/g,'<br>'); loveResultDiv.style.display='block'; shareLoveBtn.style.display = 'inline-block'; create_love_calculator_animation(); }
+            loveCalcBtn.addEventListener('click', calcLove); [boyNameInput,girlNameInput].forEach(i=>i.addEventListener('keypress',e=>{if(e.key==='Enter')calcLove()}));
+            shareLoveBtn.addEventListener('click', () => {
+                const bN = boyNameInput.value.trim();
+                const gN = girlNameInput.value.trim();
+                const percentage = lovePercDisp.textContent;
+                const message = loveMsgDisp.textContent;
+                const shayariText = loveShayariDisp.innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+                
+                const shareTitle = `💖 ${bN} और ${gN} का लव % - FunSpark`;
+                let shareText = 
+`मैंने FunSpark लव कैलकुलेटर पर ${bN} और ${gN} का प्यार चेक किया! 💕\n
+परिणाम:\n❤️ प्यार का प्रतिशत: ${percentage}\n💬 संदेश: ${message}\n`;
+                if (shayariText) {
+                    shareText += `\n✨ प्यार भरी शायरी ✨\n${shayariText}\n`;
+                }
+                shareText += `\nआप भी अपना लव % जानें FunSpark पर! 🎉\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+            function genLovePerc(n1,n2){let s=0;const c=(n1+n2).toLowerCase();for(let i=0;i<c.length;i++){s+=c.charCodeAt(i)*(i+1)}return Math.floor((s%100)+1)}
+            function genLoveShayari(b,g,p){const tS=new Date().getTime();const nH=(b+g).split('').reduce((a,c)=>a+c.charCodeAt(0),0);const rI=(tS+nH)%loveShayariTmpls.length;const tmpl=loveShayariTmpls[rI];return tmpl.replace(/{boy}/g,b).replace(/{girl}/g,g).replace(/{percentage}/g,p)}
+            window.create_love_calculator_animation = ()=>{ if(!loveHeartsCont) return; loveHeartsCont.innerHTML='';for(let i=0;i<10;i++){setTimeout(()=>{const h=document.createElement('div');h.className='heart';h.innerHTML='💖';h.style.left=Math.random()*100+'%';h.style.animationDelay=Math.random()*2+'s';loveHeartsCont.appendChild(h);setTimeout(()=>{if(h.parentNode)h.parentNode.removeChild(h)},4000)},i*200)}}
+        }
+        
+        // --- Prem Match Maker (NEW) ---
+        const prem_loveShayariTemplates = [ "{boy} और {girl} का प्यार अनमोल,\n{percentage}% दिल का ये बोल।\nदोनों की मुहब्बत में छुपा जमाना,\nसाथ चलने का ये दीवाना! 💕", "{girl} की आँखों में {boy} का प्यार,\n{percentage}% मुहब्बत का ये उपहार।\nदोनों के दिल एक ही धड़कन,\nप्रेम की ये अद्भुत तरंग! 💓", "{boy} कहता {girl} तू मेरी जिंदगी,\n{percentage}% प्रेम की ये बंदगी।\nतेरे बिना अधूरा लगता संसार,\nतू ही मेरा प्यार! 🌍", "{girl} के प्यार में {boy} दीवाना,\n{percentage}% मुहब्बत का ये तराना।\nदोनों का साथ हो जीवन भर,\nये प्रेम कहानी सबसे प्यारी! 🎵", "{boy} और {girl} की जोड़ी मस्त,\n{percentage}% प्रेम में दोनों व्यस्त।\nएक दूसरे के लिए बने हैं,\nप्रेम के रंग में रंगे हैं! 🎨", "{girl} की हंसी में {boy} की खुशी,\n{percentage}% प्यार की ये तुष्टि।\nदोनों के सपने एक साथ,\nजीवन भर चलेगा ये साथ! 🤝", "{boy} के दिल में {girl} का बसेरा,\n{percentage}% प्रेम का ये चेहरा।\nतेरे प्यार में मिली मुझे ताकत,\nजीवन भर चलेगी ये बरकत! 💪", "{girl} और {boy} का प्यार सच्चा,\n{percentage}% मुहब्बत का ये बच्चा।\nदोनों का रिश्ता प्यारा,\nजीवन भर का सहारा! 🏠", "{boy} की आँखों में {girl} के सपने,\n{percentage}% प्रेम के ये अपने।\nदोनों के दिल में बसा प्यार,\nये रिश्ता है बेशुमार! 💎", "{girl} के साथ {boy} खुश,\n{percentage}% मुहब्बत का ये जोश।\nप्रेम की इस राह में,\nदोनों चलते एक साथ में! 🛤️", "{boy} कहता {girl} तू मेरी रानी,\n{percentage}% प्यार की ये कहानी।\nतेरे प्रेम में खो जाऊं,\nतुझसे ही जीवन पाऊं! 👸", "{girl} के प्यार में {boy} का जमाना,\n{percentage}% मुहब्बत का ये दीवाना।\nदोनों का प्रेम अमर रहे,\nये रिश्ता हमेशा खुशहाल रहे! ✨", "{boy} और {girl} की मुहब्बत गहरी,\n{percentage}% प्रेम की ये लहरी।\nसमंदर जैसा प्यार है,\nये रिश्ता बेमिसाल है! 🌊", "{girl} की मुस्कान {boy} की दुनिया,\n{percentage}% प्रेम की ये दुनिया।\nतेरी खुशी में मेरी खुशी,\nये प्यार है सबसे सच्ची! 😊", "{boy} के दिल में {girl} का प्यार,\n{percentage}% मुहब्बत का संसार।\nदोनों की मंजिल एक ही,\nप्रेम की ये मधुर कहानी! 🎯", "{girl} और {boy} का साथ निराला,\n{percentage}% प्रेम का ये प्याला।\nदोनों के दिल में बसा प्यार,\nजीवन भर का ये अधिकार! 🥂", "{boy} की धड़कन में {girl} का नाम,\n{percentage}% मुहब्बत का ये काम।\nप्रेम की इस डगर में,\nसाथ चलना है हमेशा! 💗", "{girl} के प्यार से {boy} की शान,\n{percentage}% मुहब्बत की पहचान।\nदोनों का रिश्ता मजबूत,\nजीवन भर न होगा टूट! 🔗", "{boy} कहता {girl} तू मेरा प्यार,\n{percentage}% दिल का ये उपहार।\nतेरे साथ जीना चाहता हूं,\nतुझसे ही सब कुछ पाना चाहता हूं! 💝", "{girl} की आँखों में {boy} के सपने,\n{percentage}% प्रेम के ये अपने।\nदोनों का प्यार चांद जैसा,\nशीतल और सुंदर जैसा! 🌙", "{boy} और {girl} की जोड़ी प्यारी,\n{percentage}% मुहब्बत की ये न्यारी।\nप्रेम के रंग में रंगे दोनों,\nखुशियों से भरे दोनों! 🌈", "{girl} के लिए {boy} की दुआ,\n{percentage}% प्रेम की ये रुआ।\nमुहब्बत का ये सिलसिला,\nजीवन भर चलता रहे! 🤲", "{boy} के प्यार में {girl} खुश,\n{percentage}% मुहब्बत का ये होश।\nदोनों का साथ प्यारा,\nजीवन का सबसे अच्छा सहारा! 🥰", "{girl} और {boy} का प्रेम अनूठा,\n{percentage}% मुहब्बत का ये झूठा नहीं।\nसच्चे प्यार की ये मिसाल,\nदोनों का भविष्य खुशहाल! 🌟", "{boy} की जिंदगी में {girl} का प्यार,\n{percentage}% मुहब्बत का ये संसार।\nदोनों के दिल एक ही बात,\nप्रेम की ये अद्भुत रात! 🌃" ];
+        const prem_loveMessages = [ { min: 95, max: 100, message: "Perfect Match! सुपर कपल! 💯❤️ तुम दोनों एक दूजे के लिए ही बने हो!" }, { min: 90, max: 94, message: "Made for Each Other! एक दूसरे के लिए बने! 🌟💕 यह प्यार अद्भुत है!" }, { min: 85, max: 89, message: "Great Compatibility! शानदार जोड़ी! 🏆💖 आपका प्यार बहुत मजबूत है!" }, { min: 80, max: 84, message: "Very Good Match! बहुत अच्छी जोड़ी! 👍❤️ आपका रिश्ता खूबसूरत है!" }, { min: 75, max: 79, message: "Sweet Couple! प्यारा जोड़ा! 🤗💕 प्यार बनाए रखें!" }, { min: 70, max: 74, message: "Good Connection! अच्छा कनेक्शन! 😊💓 थोड़ी और कोशिश, और प्यार गहरा होगा!" }, { min: 65, max: 69, message: "Nice Pair! बढ़िया जोड़ी! 🤲💖 एक दूसरे को समझने की कोशिश करें!" }, { min: 60, max: 64, message: "Decent Match! ठीक-ठाक मैच! 🙏💪 प्यार को और समय दें!" }, { min: 50, max: 59, message: "Work on Love! प्यार पर काम करें! 💝⚡ थोड़ी मेहनत से सब ठीक हो सकता है!" }, { min: 0, max: 49, message: "Need More Efforts! और मेहनत चाहिए! 👫💪 उम्मीद मत हारें, प्यार बढ़ाया जा सकता है!" } ];
+        const prem_loveTips = [ "एक दूसरे को रोज कम से कम 15 मिनट का क्वालिटी टाइम दें, बिना किसी डिस्ट्रेक्शन के। 🕐", "छोटी-छोटी बातों में भी एक दूसरे की तारीफ करें और आभार व्यक्त करें। 👏", "गुस्से में भी प्यार और सम्मान से बात करने की कोशिश करें, समस्या का हल निकालें। 😌", "एक साथ नई चीजें सीखें या कोई हॉबी अपनाएं, इससे रिश्ता मजेदार बनेगा। 🎯", "एक दूसरे के परिवार और दोस्तों का सम्मान करें और उनके साथ अच्छे संबंध बनाएं। 👨‍👩‍👧‍👦", "समय-समय पर छोटे-छोटे सरप्राइज देते रहें, यह प्यार को तरोताजा रखता है। 🎉", "जब फोन पर बात करें तो पूरा ध्यान दें, मल्टीटास्किंग से बचें। 📱", "एक दूसरे के सपनों और लक्ष्यों का समर्थन करें और उन्हें पाने में मदद करें। 🌟", "कभी-कभी बिना किसी खास मौके के भी रोमांटिक डेट पर जाएं। 🍽️", "गलती होने पर माफी मांगने और माफ करने में देर न करें। 🙏", "एक दूसरे की भावनाओं को समझने की कोशिश करें और सहानुभूति दिखाएं। 💭", "साथ में हंसना, खेलना और मस्ती करना न भूलें, यह रिश्ते को जीवंत रखता है। 😄", "मुश्किल वक्त में एक दूसरे का सहारा बनें और मिलकर चुनौतियों का सामना करें। 🤝", "छोटी-छोटी खुशियों को भी मिलकर सेलिब्रेट करें, इससे पॉजिटिविटी बढ़ती है। 🎊", "एक दूसरे पर विश्वास रखें, यह किसी भी मजबूत रिश्ते की नींव है। 💚" ];
+        const prem_romanticGifts = [ { emoji: "🌹", name: "लाल गुलाब का गुलदस्ता", desc: "प्यार का क्लासिक और सदाबहार इज़हार।" }, { emoji: "💍", name: "प्रॉमिस रिंग या पेंडेंट", desc: "साथ रहने के वादे की खूबसूरत निशानी।" }, { emoji: "🧸", name: "प्यारा सा टेडी बियर", desc: "जब आप साथ न हों तो आपकी याद दिलाने के लिए।" }, { emoji: "💎", name: "पर्सनलाइज्ड जूलरी (नाम या तारीख)", desc: "एक यादगार और खास तोहफा।" }, { emoji: "📱", name: "कपल फोन केस या एक्सेसरी", desc: "रोजाना इस्तेमाल होने वाली मैचिंग चीजें।" }, { emoji: "🍫", name: "पसंदीदा चॉकलेट का बॉक्स", desc: "प्यार में मिठास घोलने के लिए।" }, { emoji: "👕", name: "मैचिंग कपल टी-शर्ट", desc: "एक साथ पहनने के लिए मजेदार और प्यारा।" }, { emoji: "📸", name: "खूबसूरत फोटो फ्रेम (आपकी तस्वीर के साथ)", desc: "प्यारी यादों को सहेजने के लिए।" }, { emoji: "🎵", name: "आप दोनों के पसंदीदा गानों की प्लेलिस्ट", desc: "रोमांटिक पलों को और खास बनाने के लिए।" }, { emoji: "☕", name: "कपल मग सेट", desc: "सुबह की चाय/कॉफी साथ में एन्जॉय करने के लिए।" }, { emoji: "🕯️", name: "खुशबूदार मोमबत्तियां", desc: "रोमांटिक और आरामदायक माहौल बनाने के लिए।" }, { emoji: "💌", name: "हाथ से लिखा प्यार भरा खत", desc: "अपनी भावनाओं को शब्दों में बयां करने का सबसे अच्छा तरीका।" }, { emoji: "🌺", name: "उनका पसंदीदा परफ्यूम", desc: "एक खुशबूदार और पर्सनल गिफ्ट।" }, { emoji: "⌚", name: "स्टाइलिश कपल वॉच सेट", desc: "एक दूसरे को समय देने का प्रतीक।" }, { emoji: "🎁", name: "सरप्राइज गिफ्ट हैंपर", desc: "उनकी पसंद की छोटी-छोटी चीजों से भरा।" } ];
+        const prem_specialMessages = [ "सच्चा प्यार जिंदगी की सबसे खूबसूरत नियामत है! इसे संभाल कर रखें। 💕", "एक दूसरे को समझना और स्वीकार करना ही प्रेम की पहली शर्त है! ❤️", "छोटी-छोटी बातों में भी प्यार छुपा होता है, बस देखने वाली नजर चाहिए! 🌟", "विश्वास, सम्मान और थोड़ी सी मस्ती, खुशहाल रिश्ते का यही है राज! 🤝", "साथ हंसना और कभी एक दूसरे का कंधा बनना, यही तो सच्चा प्यार है! 😊😢", "प्रेम में धैर्य और समझदारी किसी भी रिश्ते को मजबूत बनाती है! 🧠💖", "प्यार सिर्फ कहने से नहीं, आपकी परवाह और हरकतों से जाहिर होता है! 👀💝", "खुशियां बांटने से दोगुनी होती हैं और गम बांटने से आधे! हमेशा साथ रहें। 🌈✨" ];
+
+        function prem_generateLovePercentage(name1, name2, status) {
+            let seed = 0;
+            const combined = (name1.toLowerCase() + name2.toLowerCase()).replace(/\s/g, '');
+            for (let i = 0; i < combined.length; i++) { seed += combined.charCodeAt(i) * (i + 1) * 3; }
+            const timeBonus = (new Date().getHours() + new Date().getMinutes() + new Date().getSeconds()) % 10;
+            seed += timeBonus * 5;
+            switch(status) { case 'married': seed += 25; break; case 'engaged': seed += 15; break; case 'dating': seed += 10; break; case 'crush': seed -= 5; break; case 'just_friends': seed -= 10; break; case 'complicated': seed -= 15; break;}
+            seed = Math.abs(seed);
+            let percentage = (seed % 61) + 40;
+            if (combined.length < 8) percentage -= 3; if (combined.length > 15) percentage += 3;
+            if (percentage > 100) percentage = 100; if (percentage < 0) percentage = 0;
+            return Math.floor(percentage);
+        }
+        function prem_generateLoveShayari(boyName, girlName, percentage) {
+            const randomIndex = Math.floor(Math.random() * prem_loveShayariTemplates.length);
+            let shayari = prem_loveShayariTemplates[randomIndex];
+            const capitalizedBoyName = boyName.charAt(0).toUpperCase() + boyName.slice(1);
+            const capitalizedGirlName = girlName.charAt(0).toUpperCase() + girlName.slice(1);
+            shayari = shayari.replace(/{boy}/g, capitalizedBoyName).replace(/{girl}/g, capitalizedGirlName).replace(/{percentage}/g, percentage).replace(/\n/g, '<br>');
+            return shayari;
+        }
+        function prem_generateLoveTips(percentage) {
+            const shuffledTips = [...prem_loveTips].sort(() => 0.5 - Math.random());
+            const numTips = percentage < 70 ? 3 : 2; 
+            const selectedTips = shuffledTips.slice(0, numTips);
+            let tipsHtml = ''; selectedTips.forEach(tip => { tipsHtml += `<div class="prem-tip">${tip}</div>`; });
+            return tipsHtml;
+        }
+        function prem_generateGiftSuggestions() { 
+            const shuffledGifts = [...prem_romanticGifts].sort(() => 0.5 - Math.random());
+            const numGifts = 3;
+            const selectedGifts = shuffledGifts.slice(0, numGifts);
+            let giftsHtml = '';
+            selectedGifts.forEach(gift => {
+                giftsHtml += `<div class="prem-gift-item"><span class="prem-gift-emoji">${gift.emoji}</span><div class="prem-gift-details"><div class="prem-gift-name">${gift.name}</div><div class="prem-gift-desc">${gift.desc}</div></div></div>`;
+            });
+            return giftsHtml;
+        }
+        function create_prem_match_maker_animation() { 
+            const flowersContainer = document.getElementById('prem-flowers-container');
+            if (!flowersContainer) return;
+            flowersContainer.innerHTML = ''; 
+            const flowerEmojis = ['🌸', '🌹', '🌼', '🌷', '🌺', '💖', '💕', '❤️', '🧡', '💛'];
+            const numFlowers = Math.floor(Math.random() * 10) + 25;
+            for (let i = 0; i < numFlowers; i++) {
+                const flower = document.createElement('span');
+                flower.classList.add('prem-flower-item'); 
+                flower.innerHTML = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.animationDuration = (Math.random() * 5 + 7) + 's';
+                flower.style.animationDelay = Math.random() * 10 + 's';
+                flower.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                flower.style.opacity = (Math.random() * 0.3 + 0.5).toFixed(1);
+                flowersContainer.appendChild(flower);
+                 setTimeout(() => {if (flower.parentNode) flower.parentNode.removeChild(flower);}, (parseFloat(flower.style.animationDuration) + parseFloat(flower.style.animationDelay)) * 1000 + 500);
+            }
+        }
+        
+        function prem_calculateLoveCompatibility() {
+            const boyName = document.getElementById('prem-boy-name').value.trim();
+            const girlName = document.getElementById('prem-girl-name').value.trim();
+            const relationshipStatus = document.getElementById('prem-relationship-status').value;
+            const shareBtn = document.getElementById('share-prem-match-result-btn');
+            
+            if (!boyName || !girlName) { alert('कृपया दोनों नाम भरें! 💕'); if(shareBtn) shareBtn.style.display = 'none'; return; }
+            if (boyName.toLowerCase() === girlName.toLowerCase()) { alert('कृपया अलग-अलग नाम भरें! 😊'); if(shareBtn) shareBtn.style.display = 'none'; return; }
+            
+            const percentage = prem_generateLovePercentage(boyName, girlName, relationshipStatus);
+            const messageObj = prem_loveMessages.find(m => percentage >= m.min && percentage <= m.max);
+            const message = messageObj ? messageObj.message : "आपका प्यार अनोखा है! ❤️";
+            const shayari = prem_generateLoveShayari(boyName, girlName, percentage);
+            const specialMsg = prem_specialMessages[Math.floor(Math.random() * prem_specialMessages.length)];
+            const tips = prem_generateLoveTips(percentage);
+            const gifts = prem_generateGiftSuggestions(); 
+            
+            document.getElementById('prem-percentage-display').textContent = percentage + '%';
+            document.getElementById('prem-message-display').textContent = message;
+            document.getElementById('prem-shayari-display').innerHTML = shayari;
+            document.getElementById('prem-special-message-display').textContent = specialMsg;
+            document.getElementById('prem-tips-content').innerHTML = tips;
+            document.getElementById('prem-gifts-content').innerHTML = gifts;
+            
+            const resultDiv = document.getElementById('prem-result-display');
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+            if(shareBtn) shareBtn.style.display = 'inline-block';
+            create_prem_match_maker_animation(); 
+        }
+
+        const premCalculateBtn = document.getElementById('prem-calculate-btn');
+        if (premCalculateBtn) {
+            premCalculateBtn.addEventListener('click', prem_calculateLoveCompatibility);
+            [document.getElementById('prem-boy-name'), document.getElementById('prem-girl-name')].forEach(input => {
+                if(input) input.addEventListener('keypress', e => { if (e.key === 'Enter') prem_calculateLoveCompatibility(); });
+            });
+        }
+        
+        const sharePremMatchBtn = document.getElementById('share-prem-match-result-btn');
+        if (sharePremMatchBtn) {
+            sharePremMatchBtn.addEventListener('click', () => {
+                const boyName = document.getElementById('prem-boy-name').value.trim();
+                const girlName = document.getElementById('prem-girl-name').value.trim();
+                const percentage = document.getElementById('prem-percentage-display').textContent;
+                const message = document.getElementById('prem-message-display').textContent;
+                const shayariText = document.getElementById('prem-shayari-display').innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+                const specialMsg = document.getElementById('prem-special-message-display').textContent.trim();
+                const tipsText = Array.from(document.getElementById('prem-tips-content').children).map(tip => tip.textContent.trim()).join('\n- ');
+                const giftsText = Array.from(document.getElementById('prem-gifts-content').children).map(gift => `${gift.querySelector('.prem-gift-emoji').textContent} ${gift.querySelector('.prem-gift-name').textContent}: ${gift.querySelector('.prem-gift-desc').textContent}`).join('\n- ');
+
+                const shareTitle = `💕 ${boyName} और ${girlName} का प्रेम % - FunSpark`;
+                let shareText = `मैंने FunSpark प्रेम मैच मेकर पर ${boyName} और ${girlName} का प्यार चेक किया! ❤️\n\nपरिणाम:\n💖 प्रेम प्रतिशत: ${percentage}\n💬 संदेश: ${message}\n`;
+                if (specialMsg) { shareText += `\n💌 खास संदेश: ${specialMsg}\n`; }
+                if (shayariText) { shareText += `\n✨ प्रेम शायरी ✨\n${shayariText}\n`; }
+                if (tipsText && document.getElementById('prem-tips-content').children.length > 0) { shareText += `\n💡 प्यार बढ़ाने के टिप्स:\n- ${tipsText}\n`; }
+                if (giftsText && document.getElementById('prem-gifts-content').children.length > 0) { shareText += `\n🎁 रोमांटिक गिफ्ट आइडियाज:\n- ${giftsText}\n`; }
+                shareText += `\nआप भी अपना प्रेम % जानें FunSpark पर! 🎉\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+        }
+
+        // --- Friendship Calculator ---
+        const friendCalcBtn = document.getElementById('friendship-calculate-btn');
+        const shareFriendshipBtn = document.getElementById('share-friendship-result-btn');
+        if (friendCalcBtn) {
+            const fr1NameInput = document.getElementById('friend1-name'); const fr2NameInput = document.getElementById('friend2-name');
+            const frResultDiv = document.getElementById('friendship-result'); const frPercDisp = document.getElementById('friendship-percentage-display');
+            const frMsgDisp = document.getElementById('friendship-message-display'); const frShayariDisp = document.getElementById('friendship-shayari-display');
+            const frStarsCont = document.getElementById('friendship-stars-container');
+            const frShayariTmpls = ["{friend1} और {friend2} की दोस्ती है प्यारी,\n{percentage}% खुशियों से भरी ये यारी।\nजिंदगी के हर मोड़ पर साथ निभाएं,\nइस दोस्ती को हमेशा बनाए रखें! 🤝", "{friend2} के साथ {friend1} की जोड़ी निराली,\n{percentage}% दोस्ती की ये मिसाली।\nखुशी-गम में हों हमेशा साथ,\nये दोस्ती दे जीवन को नई राह! ✨", "{friend1} और {friend2} के रिश्ते में है दम,\n{percentage}% वफादारी, कोई नहीं कम।\nसच्चे मित्र मिलते हैं किस्मत से,\nये दोस्ती रहे हमेशा मुहब्बत से! 💫", "{friend2} है {friend1} का सच्चा यार,\n{percentage}% दोस्ती का ये उपहार।\nमुश्किलों में भी न छोड़े साथ,\nयही तो है असली दोस्ती की बात! 🌈", "{friend1} और {friend2} की यारी है मस्त,\n{percentage}% मजे की, बिल्कुल फर्स्ट क्लास।\nहंसी-खुशी से भरा हो जीवन,\nये दोस्ती रहे हमेशा जीवन! 🎉", "{friend2} के बिना {friend1} है अधूरा,\n{percentage}% दोस्ती का ये नूरा।\nजन्म-जन्म तक चले ये रिश्ता,\nबना रहे हमेशा दोस्ती का ये किस्सा! 🌟", "{friend1} की खुशी में {friend2} खुश,\n{percentage}% यारी का ये जोश।\nदोस्ती की ये मिठास प्यारी,\nरहे हमेशा साथ ये यारी! 🍭", "{friend2} और {friend1} का बंधन अटूट,\n{percentage}% दोस्ती का ये फूट।\nसच्चाई और वफा का रिश्ता,\nबने हमेशा खुशियों का किस्सा! 🔗", "{friend1} के साथ {friend2} का मेल,\n{percentage}% यारी का ये खेल।\nदोस्ती के इस सफर में,\nमिले खुशियाँ हर पहर में! 🎮", "{friend2} की यादों में {friend1} मुस्काता,\n{percentage}% दोस्ती का प्रेम समाता।\nमित्रता की ये कहानी सुंदर,\nबना दे जीवन को और भी बेहतर! 😊", "{friend1} और {friend2} की जोड़ी कमाल,\n{percentage}% यारी का ये जमाल।\nदोस्ती के इस बंधन में बंधकर,\nजी लें जिंदगी को महकाकर! 🌺", "{friend2} के साथ {friend1} का साथ,\n{percentage}% दोस्ती की ये बात।\nमित्रता का ये सिलसिला चले,\nखुशियों का ये मेला चले! 🎪", "{friend1} कहे {friend2} तू है मेरा भाई,\n{percentage}% यारी की ये कहाई।\nदोस्ती की ये शान निराली,\nहो जाए हमेशा खुशियों की सारी! 👬", "{friend2} की हंसी में {friend1} का जमाना,\n{percentage}% दोस्ती का ये दीवाना।\nमित्रता के इस रास्ते पर,\nमिले खुशियाँ हर कदम पर! 🛤️", "{friend1} और {friend2} का प्रेम गहरा,\n{percentage}% यारी का ये लहरा।\nदोस्ती की ये मंजिल सुहानी,\nबने इनकी मित्रता कहानी! 📚", "{friend2} के प्यार में {friend1} खुश,\n{percentage}% दोस्ती का ये जोश।\nमित्रता का ये जादू चलता रहे,\nखुशियों का ये रिश्ता चलता रहे! ✨", "{friend1} की परेशानी में {friend2} आता,\n{percentage}% यारी का सहारा लाता।\nदोस्ती के इस बंधन में,\nमिले खुशियाँ जीवन में! 🤗", "{friend2} और {friend1} की प्रीत निराली,\n{percentage}% मित्रता की ये मिसाली।\nदोस्ती का ये रंग सुहाना,\nबने हमेशा खुशियों का खजाना! 🎨"];
+            const frMsgs = [{min:90,max:100,message:"सुपर बेस्ट फ्रेंड्स! 🌟👑"},{min:80,max:89,message:"परफेक्ट दोस्ती! 🤝💎"},{min:70,max:79,message:"बहुत अच्छे दोस्त! 👫🎉"},{min:60,max:69,message:"अच्छी दोस्ती! 😊👍"},{min:50,max:59,message:"ठीक-ठाक यार! 🙂✌️"},{min:40,max:49,message:"दोस्ती में सुधार की जरूरत! 💪🔧"},{min:30,max:39,message:"कैजुअल फ्रेंड्स! 😅🤷"},{min:20,max:29,message:"नए दोस्त हो? 🤔👋"},{min:0,max:19,message:"अभी तो शुरुआत है! 🌱🆕"}];
+            function calcFriendship() { const n1=fr1NameInput.value.trim(); const n2=fr2NameInput.value.trim(); if(!n1||!n2){alert('कृपया दोनों नाम भरें! 🤝'); shareFriendshipBtn.style.display = 'none'; return} const p=genFrPerc(n1,n2); const m=frMsgs.find(msg=>p>=msg.min&&p<=msg.max).message; const s=genFrShayari(n1,n2,p); frPercDisp.textContent=p+'%'; frMsgDisp.textContent=m; frShayariDisp.innerHTML=s.replace(/\n/g,'<br>'); frResultDiv.style.display='block'; shareFriendshipBtn.style.display = 'inline-block'; create_friendship_calculator_animation(); }
+            friendCalcBtn.addEventListener('click', calcFriendship); [fr1NameInput,fr2NameInput].forEach(i=>i.addEventListener('keypress',e=>{if(e.key==='Enter')calcFriendship()}));
+            shareFriendshipBtn.addEventListener('click', () => {
+                const n1 = fr1NameInput.value.trim();
+                const n2 = fr2NameInput.value.trim();
+                const percentage = frPercDisp.textContent;
+                const message = frMsgDisp.textContent;
+                const shayariText = frShayariDisp.innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+
+                const shareTitle = `🤝 ${n1} और ${n2} की दोस्ती % - FunSpark`;
+                let shareText = 
+`मैंने FunSpark फ्रेंडशिप कैलकुलेटर पर ${n1} और ${n2} की दोस्ती चेक की! 🥳\n
+परिणाम:\n🌟 दोस्ती का प्रतिशत: ${percentage}\n💬 संदेश: ${message}\n`;
+                if (shayariText) {
+                    shareText += `\n✨ दोस्ती की शायरी ✨\n${shayariText}\n`;
+                }
+                shareText += `\nआप भी अपनी दोस्ती का % जानें FunSpark पर! 👫\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+            function genFrPerc(n1,n2){let s=0;const c=(n1+n2).toLowerCase();for(let i=0;i<c.length;i++){s+=c.charCodeAt(i)*(i+2)+Math.pow(i,2)}s+=(n1.length+n2.length)*3;return Math.floor((s%100)+1)}
+            function genFrShayari(f1,f2,p){const tS=new Date().getTime();const nH=(f1+f2).split('').reduce((a,b)=>a+b.charCodeAt(0),0);const rI=(tS+nH)%frShayariTmpls.length;const tmpl=frShayariTmpls[rI];return tmpl.replace(/{friend1}/g,f1).replace(/{friend2}/g,f2).replace(/{percentage}/g,p)}
+            window.create_friendship_calculator_animation = ()=>{ if(!frStarsCont) return; frStarsCont.innerHTML='';const sE=['⭐','🌟','✨','💫','🌠'];for(let i=0;i<12;i++){setTimeout(()=>{const s=document.createElement('div');s.className='star';s.innerHTML=sE[Math.floor(Math.random()*sE.length)];s.style.left=Math.random()*100+'%';s.style.animationDelay=Math.random()*3+'s';s.style.fontSize=(15+Math.random()*15)+'px';frStarsCont.appendChild(s);setTimeout(()=>{if(s.parentNode)s.parentNode.removeChild(s)},5000)},i*150)}}
+        }
+
+        // --- Papa Ka Pyaar Calculator ---
+        const papaLoveCalcBtn = document.getElementById('papa-love-calculate-btn');
+        const sharePapaLoveBtn = document.getElementById('share-papa-love-result-btn');
+        if (papaLoveCalcBtn) {
+            const papaNameIn = document.getElementById('papa-name'); const papaChildNameIn = document.getElementById('papa-child-name'); const papaChildTypeSel = document.getElementById('papa-child-type');
+            const papaResultDiv = document.getElementById('papa-love-result'); const papaPercDisp = document.getElementById('papa-love-percentage-display');
+            const papaMsgDisp = document.getElementById('papa-love-message-display'); const papaShayariDisp = document.getElementById('papa-love-shayari-display');
+            const papaSpecialMsgDisp = document.getElementById('papa-love-special-message'); const papaMustacheCont = document.getElementById('papa-mustache-container');
+            const papaShayariTmpls = ["{papa} के दिल में {child} का प्यार,\n{percentage}% पिता का ये उपहार।\nबेटे/बेटी के लिए दुनिया छोटी,\nपापा का प्रेम कभी न होती मोती! 👨‍👦", "{child} की खुशी में {papa} की जान,\n{percentage}% प्रेम की ये पहचान।\nपिता का प्यार समंदर जैसा गहरा,\nहर परेशानी में बनता सहारा! 🌊", "{papa} कहते {child} तू मेरी जिंदगी,\n{percentage}% प्रेम की ये बंदगी।\nपापा के प्यार में छुपा संसार,\nबच्चों के लिए करे हर बलिदान! 🌍", "{child} के सपनों के लिए {papa} जगे,\n{percentage}% प्रेम से दिल भरे।\nरात-दिन मेहनत करके लाते,\nबच्चों की हर इच्छा पूरी कराते! 💼", "{papa} का प्यार {child} के लिए अनमोल,\n{percentage}% दिल का ये बोल।\nपिता की ममता कभी न कम,\nहर मुश्किल में साथ हैं हम! 💎", "{child} की हंसी में {papa} का जमाना,\n{percentage}% प्रेम का ये दीवाना।\nपापा के कंधे पर सवार होकर,\nदेखा है जग सारा प्यार से! 🎠", "{papa} के हाथों की छाया में,\n{child} बड़ा हुआ माया में।\n{percentage}% प्रेम का ये सिलसिला,\nपिता-पुत्र का अटूट रिश्ता! 🤗", "{child} की परेशानी में {papa} परेशान,\n{percentage}% प्रेम की ये शान।\nबच्चे के लिए दुनिया से लड़े,\nपापा का प्यार कभी न हारे! ⚔️", "{papa} की मेहनत {child} के लिए,\n{percentage}% प्रेम हर दिन के लिए।\nपिता का त्याग, माँ का प्यार,\nबनाते जीवन को खुशियों का संसार! 🏠", "{child} के भविष्य की चिंता में,\n{papa} रहते हर घड़ी व्यस्त।\n{percentage}% प्रेम का ये एहसास,\nपापा बनाते सपनों को खास! ✨", "{papa} कहते बेटा/बेटी तू मेरा गर्व,\n{percentage}% प्रेम का ये गर्व।\nपिता की आँखों में छुपे सपने,\n{child} के लिए हैं सबसे अपने! 👁️", "{child} की सफलता में {papa} खुश,\n{percentage}% प्रेम का ये जोश।\nपापा का आशीर्वाद साथ हो,\nहर राह में कामयाबी की बात हो! 🏆", "{papa} के प्यार में {child} बड़ा,\n{percentage}% ममता का ये सहारा।\nपिता के कदमों पर चलकर,\nबनता है बच्चा बेहतर! 👣", "{child} की जरूरत {papa} की प्राथमिकता,\n{percentage}% प्रेम की ये विशेषता।\nअपनी खुशी छोड़कर भी,\nबच्चों के लिए करते सब कुछ! 💝", "{papa} का दुलार {child} के लिए,\n{percentage}% प्रेम की ये राह।\nपिता के प्यार में मिली ताकत,\nजीवन भर चलेगी ये बरकत! 💪", "{child} के लिए {papa} की दुआ,\n{percentage}% प्रेम की ये रुआ।\nपापा का प्यार आसमान जैसा,\nहर परेशानी का समाधान जैसा! 🌤️", "{papa} और {child} का रिश्ता प्यारा,\n{percentage}% प्रेम का ये सहारा।\nपिता-पुत्र का बंधन मजबूत,\nजीवन भर न होगा टूट! 🔗", "{child} की खुशी के लिए {papa} जीते,\n{percentage}% प्रेम के साथ जीते।\nपापा का प्यार अमृत जैसा,\nहर दुख को करे दूर जैसा! 🍯", "{papa} के कंधे {child} का सहारा,\n{percentage}% प्रेम का ये प्यारा।\nपिता की छत्रछाया में पलकर,\nबना है बच्चा होनहार! 🏠", "{child} के सपने {papa} के सपने,\n{percentage}% प्रेम के ये अपने।\nपापा का प्यार गंगा जैसा पवित्र,\nजीवन को बनाता पवित्र! 🕉️", "{papa} की आँखों में {child} का प्रेम,\n{percentage}% दिल का ये गेम।\nपिता का प्यार सूरज जैसा तेज,\nहर अंधेरे को करे भेज! ☀️", "{child} के लिए {papa} का त्याग महान,\n{percentage}% प्रेम की ये शान।\nपापा का प्यार कभी न कम,\nजीवन भर साथ हैं हम! 🙏"];
+            const papaMsgs = [{min:95,max:100,message:"सुपर पापा! दुनिया के बेस्ट डैड! 👑👨"},{min:90,max:94,message:"परफेक्ट पिता! Amazing Dad! 🌟👨‍👦"},{min:85,max:89,message:"शानदार पापा! Great Father! 🏆👨‍👧"},{min:80,max:84,message:"बहुत अच्छे पिता! Very Good Dad! 👍❤️"},{min:75,max:79,message:"प्यारे पापा! Sweet Father! 🤗💕"},{min:70,max:74,message:"अच्छे पिता! Good Dad! 😊👨"},{min:65,max:69,message:"केयरिंग पापा! Caring Father! 🤲💖"},{min:60,max:64,message:"मेहनती पिता! Hardworking Dad! 💼💪"},{min:50,max:59,message:"प्यार करने वाले पापा! Loving Father! 💝"},{min:0,max:49,message:"पापा का प्यार बढ़ाने का टाइम! Time to Bond! 👨‍👦‍👦"}];
+            const papaSpecialMsgs = ["पिता का प्रेम दुनिया की सबसे बड़ी ताकत है! 💪","पापा का प्यार हमेशा बच्चों के साथ रहता है! ❤️","एक पिता हजारों शिक्षकों के बराबर होता है! 📚","पापा की छत्रछाया में बच्चे सुरक्षित रहते हैं! 🛡️","पिता का आशीर्वाद सबसे बड़ा खजाना है! 💎","पापा का प्यार जीवन भर का सहारा है! 🤗"];
+            function calcPapaLove() {const pN=papaNameIn.value.trim();const cN=papaChildNameIn.value.trim();const cT=papaChildTypeSel.value;if(!pN||!cN){alert('कृपया पापा और बच्चे का नाम भरें! 👨‍👦'); sharePapaLoveBtn.style.display = 'none'; return}const p=genPapaPerc(pN,cN);const m=papaMsgs.find(msg=>p>=msg.min&&p<=msg.max).message;const s=genPapaShayari(pN,cN,p,cT);const sM=papaSpecialMsgs[Math.floor(Math.random()*papaSpecialMsgs.length)];papaPercDisp.textContent=p+'%';papaMsgDisp.textContent=m;papaShayariDisp.innerHTML=s.replace(/\n/g,'<br>');papaSpecialMsgDisp.textContent=sM;papaResultDiv.style.display='block'; sharePapaLoveBtn.style.display = 'inline-block'; create_papa_love_calculator_animation();}
+            papaLoveCalcBtn.addEventListener('click',calcPapaLove);[papaNameIn,papaChildNameIn].forEach(i=>i.addEventListener('keypress',e=>{if(e.key==='Enter')calcPapaLove()}));
+            sharePapaLoveBtn.addEventListener('click', () => {
+                const pN = papaNameIn.value.trim();
+                const cN = papaChildNameIn.value.trim();
+                const percentage = papaPercDisp.textContent;
+                const message = papaMsgDisp.textContent;
+                const shayariText = papaShayariDisp.innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+                const specialMessage = papaSpecialMsgDisp.textContent.trim();
+
+                const shareTitle = `👨‍👧‍👦 ${pN} का ${cN} के लिए प्यार % - FunSpark`;
+                let shareText = 
+`मैंने FunSpark पर ${pN} (पापा) का ${cN} के लिए प्यार चेक किया! ❤️\n
+परिणाम:\n💖 प्यार का प्रतिशत: ${percentage}\n💬 संदेश: ${message}\n`;
+                if (shayariText) {
+                    shareText += `\n✨ पापा के प्यार पर शायरी ✨\n${shayariText}\n`;
+                }
+                if (specialMessage) {
+                    shareText += `\n💌 खास संदेश: ${specialMessage}\n`;
+                }
+                shareText += `\nआप भी अपने पापा का प्यार जानें FunSpark पर! 😊\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+            function genPapaPerc(p,c){let s=0;const cmb=(p+c).toLowerCase();for(let i=0;i<cmb.length;i++){s+=cmb.charCodeAt(i)*(i+3)+Math.pow(i,1.5)}s+=25;return Math.floor((s%51)+50)}
+            function genPapaShayari(p,c,pct,ct){const tS=new Date().getTime();const nH=(p+c).split('').reduce((a,b)=>a+b.charCodeAt(0),0);const rI=(tS+nH)%papaShayariTmpls.length;let tmpl=papaShayariTmpls[rI];if(ct==='beti'){tmpl=tmpl.replace(/बेटे\/बेटी/g,'बेटी').replace(/बच्चा/g,'बच्ची').replace(/बेटा/g,'बेटी')}else{tmpl=tmpl.replace(/बेटे\/बेटी/g,'बेटे').replace(/बच्ची/g,'बच्चा')}return tmpl.replace(/{papa}/g,p).replace(/{child}/g,c).replace(/{percentage}/g,pct)}
+            window.create_papa_love_calculator_animation = ()=>{ if(!papaMustacheCont) return; papaMustacheCont.innerHTML='';const mE=['👨','💪','👔','🎩','⭐','💖','👑'];for(let i=0;i<8;i++){setTimeout(()=>{const m=document.createElement('div');m.className='mustache-item';m.innerHTML=mE[Math.floor(Math.random()*mE.length)];m.style.left=Math.random()*100+'%';m.style.animationDelay=Math.random()*2+'s';m.style.fontSize=(20+Math.random()*20)+'px';papaMustacheCont.appendChild(m);setTimeout(()=>{if(m.parentNode)m.parentNode.removeChild(m)},6000)},i*200)}}
+        }
+
+        // --- Maa Ka Pyaar Calculator ---
+        const maaLoveCalcBtn = document.getElementById('maa-love-calculate-btn');
+        const shareMaaLoveBtn = document.getElementById('share-maa-love-result-btn');
+        if (maaLoveCalcBtn) {
+            const maaNameIn = document.getElementById('maa-name'); const maaChildNameIn = document.getElementById('maa-child-name'); const maaChildTypeSel = document.getElementById('maa-child-type');
+            const maaResultDiv = document.getElementById('maa-love-result'); const maaPercDisp = document.getElementById('maa-love-percentage-display');
+            const maaMsgDisp = document.getElementById('maa-love-message-display'); const maaShayariDisp = document.getElementById('maa-love-shayari-display');
+            const maaSpecialMsgDisp = document.getElementById('maa-love-special-message'); const maaFlowersCont = document.getElementById('maa-flowers-container');
+            const maaShayariTmpls = ["{maa} के दिल में {child} का प्यार,\n{percentage}% माँ का ये उपहार।\nबेटे/बेटी के लिए दुनिया छोटी,\nमाँ का प्रेम कभी न होती मोती! 👩‍👦", "{child} की खुशी में {maa} की जान,\n{percentage}% प्रेम की ये पहचान।\nमाता का प्यार समंदर जैसा गहरा,\nहर परेशानी में बनती सहारा! 🌊", "{maa} कहती {child} तू मेरी जिंदगी,\n{percentage}% प्रेम की ये बंदगी।\nमाँ के प्यार में छुपा संसार,\nबच्चों के लिए करे हर बलिदान! 🌍", "{child} के सपनों के लिए {maa} जगी,\n{percentage}% प्रेम से दिल भरी।\nरात-दिन सेवा करके पालती,\nबच्चों की हर इच्छा पूरी करती! 🌙", "{maa} का प्यार {child} के लिए अनमोल,\n{percentage}% दिल का ये बोल।\nमाता की ममता कभी न कम,\nहर मुश्किल में साथ हैं हम! 💎", "{child} की हंसी में {maa} का जमाना,\n{percentage}% प्रेम का ये दीवाना।\nमाँ की गोद में सुकून पाकर,\nदेखा है जग सारा प्यार से! 🤱", "{maa} की छत्रछाया में,\n{child} बड़ा हुआ माया में।\n{percentage}% प्रेम का ये सिलसिला,\nमाता-पुत्र का अटूट रिश्ता! 🤗", "{child} की परेशानी में {maa} परेशान,\n{percentage}% प्रेम की ये शान।\nबच्चे के लिए दुनिया से लड़ी,\nमाँ का प्यार कभी न हारी! ⚔️", "{maa} की सेवा {child} के लिए,\n{percentage}% प्रेम हर दिन के लिए।\nमाता का त्याग, पिता का प्यार,\nबनाते जीवन को खुशियों का संसार! 🏠", "{child} के भविष्य की चिंता में,\n{maa} रहती हर घड़ी व्यस्त।\n{percentage}% प्रेम का ये एहसास,\nमाँ बनाती सपनों को खास! ✨", "{maa} कहती बेटा/बेटी तू मेरा गर्व,\n{percentage}% प्रेम का ये गर्व।\nमाता की आँखों में छुपे सपने,\n{child} के लिए हैं सबसे अपने! 👁️", "{child} की सफलता में {maa} खुश,\n{percentage}% प्रेम का ये जोश।\nमाँ का आशीर्वाद साथ हो,\nहर राह में कामयाबी की बात हो! 🏆", "{maa} के प्यार में {child} बड़ा,\n{percentage}% ममता का ये सहारा।\nमाता के चरणों में स्वर्ग है,\nउसकी सेवा में जीवन सार्थक है! 🙏", "{child} की जरूरत {maa} की प्राथमिकता,\n{percentage}% प्रेम की ये विशेषता।\nअपनी खुशी छोड़कर भी,\nबच्चों के लिए करती सब कुछ! 💝", "{maa} का दुलार {child} के लिए,\n{percentage}% प्रेम की ये राह।\nमाता के प्यार में मिली ताकत,\nजीवन भर चलेगी ये बरकत! 💪", "{child} के लिए {maa} की दुआ,\n{percentage}% प्रेम की ये रुआ।\nमाँ का प्यार आसमान जैसा,\nहर परेशानी का समाधान जैसा! 🌤️", "{maa} और {child} का रिश्ता प्यारा,\n{percentage}% प्रेम का ये सहारा।\nमाता-पुत्र का बंधन मजबूत,\nजीवन भर न होगा टूट! 🔗", "{child} की खुशी के लिए {maa} जीती,\n{percentage}% प्रेम के साथ जीती।\nमाँ का प्यार अमृत जैसा,\nहर दुख को करे दूर जैसा! 🍯", "{maa} की गोद {child} का सहारा,\n{percentage}% प्रेम का ये प्यारा।\nमाता की छत्रछाया में पलकर,\nबना है बच्चा संस्कारी! 🏠", "{child} के सपने {maa} के सपने,\n{percentage}% प्रेम के ये अपने।\nमाँ का प्यार गंगा जैसा पवित्र,\nजीवन को बनाता पवित्र! 🕉️", "{maa} की आँखों में {child} का प्रेम,\n{percentage}% दिल का ये गेम।\nमाता का प्यार चाँद जैसा शीतल,\nहर गम को करे विदा! 🌙", "{child} के लिए {maa} का त्याग महान,\n{percentage}% प्रेम की ये शान।\nमाँ का प्यार कभी न कम,\nजीवन भर साथ हैं हम! 🙏"];
+            const maaMsgs = [{min:95,max:100,message:"सुपर माँ! दुनिया की बेस्ट मम्मी! 👑👩"},{min:90,max:94,message:"परफेक्ट माता! Amazing Mom! 🌟👩‍👦"},{min:85,max:89,message:"शानदार मम्मी! Great Mother! 🏆👩‍👧"},{min:80,max:84,message:"बहुत अच्छी माँ! Very Good Mom! 👍❤️"},{min:75,max:79,message:"प्यारी मम्मी! Sweet Mother! 🤗💕"},{min:70,max:74,message:"अच्छी माँ! Good Mom! 😊👩"},{min:65,max:69,message:"केयरिंग मम्मी! Caring Mother! 🤲💖"},{min:60,max:64,message:"समर्पित माता! Dedicated Mom! 🙏💪"},{min:50,max:59,message:"प्यार करने वाली मम्मी! Loving Mother! 💝"},{min:0,max:49,message:"माँ का प्यार बढ़ाने का टाइम! Time to Bond! 👩‍👦‍👦"}];
+            const maaSpecialMsgs = ["माँ का प्रेम दुनिया की सबसे शुद्ध भावना है! 💕","मम्मी का प्यार हमेशा बच्चों के साथ रहता है! ❤️","एक माँ हजारों देवताओं के बराबर होती है! 🙏","मम्मी की गोद में बच्चे सुरक्षित रहते हैं! 🤱","माता का आशीर्वाद सबसे बड़ा खजाना है! 💎","माँ का प्यार जीवन भर का सहारा है! 🤗"];
+            function calcMaaLove(){const mN=maaNameIn.value.trim();const cN=maaChildNameIn.value.trim();const cT=maaChildTypeSel.value;if(!mN||!cN){alert('कृपया माँ और बच्चे का नाम भरें! 👩‍👦'); shareMaaLoveBtn.style.display = 'none'; return}const p=genMaaPerc(mN,cN);const m=maaMsgs.find(msg=>p>=msg.min&&p<=msg.max).message;const s=genMaaShayari(mN,cN,p,cT);const sM=maaSpecialMsgs[Math.floor(Math.random()*maaSpecialMsgs.length)];maaPercDisp.textContent=p+'%';maaMsgDisp.textContent=m;maaShayariDisp.innerHTML=s.replace(/\n/g,'<br>');maaSpecialMsgDisp.textContent=sM;maaResultDiv.style.display='block'; shareMaaLoveBtn.style.display = 'inline-block'; create_maa_love_calculator_animation();}
+            maaLoveCalcBtn.addEventListener('click',calcMaaLove);[maaNameIn,maaChildNameIn].forEach(i=>i.addEventListener('keypress',e=>{if(e.key==='Enter')calcMaaLove()}));
+            shareMaaLoveBtn.addEventListener('click', () => {
+                const mN = maaNameIn.value.trim();
+                const cN = maaChildNameIn.value.trim();
+                const percentage = maaPercDisp.textContent;
+                const message = maaMsgDisp.textContent;
+                const shayariText = maaShayariDisp.innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+                const specialMessage = maaSpecialMsgDisp.textContent.trim();
+
+                const shareTitle = `👩‍👧‍👦 ${mN} का ${cN} के लिए प्यार % - FunSpark`;
+                let shareText = 
+`मैंने FunSpark पर ${mN} (माँ) का ${cN} के लिए प्यार चेक किया! 🥰\n
+परिणाम:\n💖 प्यार का प्रतिशत: ${percentage}\n💬 संदेश: ${message}\n`;
+                if (shayariText) {
+                    shareText += `\n✨ माँ के प्यार पर शायरी ✨\n${shayariText}\n`;
+                }
+                if (specialMessage) {
+                    shareText += `\n💌 खास संदेश: ${specialMessage}\n`;
+                }
+                shareText += `\nआप भी अपनी माँ का प्यार जानें FunSpark पर! 😊\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+            function genMaaPerc(m,c){let s=0;const cmb=(m+c).toLowerCase();for(let i=0;i<cmb.length;i++){s+=cmb.charCodeAt(i)*(i+5)+Math.pow(i,1.8)}s+=35;return Math.floor((s%41)+60)}
+            function genMaaShayari(m,c,pct,ct){const tS=new Date().getTime();const nH=(m+c).split('').reduce((a,b)=>a+b.charCodeAt(0),0);const rI=(tS+nH)%maaShayariTmpls.length;let tmpl=maaShayariTmpls[rI];if(ct==='beti'){tmpl=tmpl.replace(/बेटे\/बेटी/g,'बेटी').replace(/बच्चा/g,'बच्ची').replace(/बेटा/g,'बेटी')}else{tmpl=tmpl.replace(/बेटे\/बेटी/g,'बेटे').replace(/बच्ची/g,'बच्चा')}return tmpl.replace(/{maa}/g,m).replace(/{child}/g,c).replace(/{percentage}/g,pct)}
+            window.create_maa_love_calculator_animation = ()=>{ if(!maaFlowersCont) return; maaFlowersCont.innerHTML='';const fE=['👩','💐','🌸','🌹','⭐','💖','👑','🤱'];for(let i=0;i<8;i++){setTimeout(()=>{const f=document.createElement('div');f.className='flower-item';f.innerHTML=fE[Math.floor(Math.random()*fE.length)];f.style.left=Math.random()*100+'%';f.style.animationDelay=Math.random()*2+'s';f.style.fontSize=(20+Math.random()*20)+'px';maaFlowersCont.appendChild(f);setTimeout(()=>{if(f.parentNode)f.parentNode.removeChild(f)},6000)},i*200)}}
+        }
+
+        // --- Sibling Love Calculator ---
+        const siblingLoveCalcBtn = document.getElementById('sibling-love-calculate-btn');
+        const shareSiblingLoveBtn = document.getElementById('share-sibling-love-result-btn');
+        let currentSiblingRel = 'bhai-behen';
+        if (siblingLoveCalcBtn) {
+            const p1NameIn = document.getElementById('sibling-person1-name'); const p2NameIn = document.getElementById('sibling-person2-name');
+            const ageGapSel = document.getElementById('sibling-age-gap'); const p1Label = document.getElementById('sibling-person1-label');
+            const p2Label = document.getElementById('sibling-person2-label'); const relTypeSelector = document.getElementById('sibling-relationship-type-selector');
+            const sibResultDiv = document.getElementById('sibling-love-result'); const sibPercDisp = document.getElementById('sibling-love-percentage-display');
+            const sibMsgDisp = document.getElementById('sibling-love-message-display'); const sibShayariDisp = document.getElementById('sibling-love-shayari-display');
+            const sibSpecialMsgDisp = document.getElementById('sibling-love-special-message'); const sibHeartsCont = document.getElementById('sibling-hearts-container');
+            const sibShayariTmpls = ["{person1} और {person2} का प्यार,\n{percentage}% का ये उपहार।\nभाई-बहन का रिश्ता प्यारा,\nदुनिया में सबसे न्यारा! 👫", "{person1} की खुशी में {person2} खुश,\n{percentage}% प्रेम का ये जोश।\nसिबलिंग बॉन्ड है मजबूत,\nकभी न होगा ये टूट! 💪", "{person2} के लिए {person1} लड़े,\n{percentage}% प्रेम से जुड़े।\nभाई-बहन की दोस्ती निराली,\nहमेशा रहती है खुशहाली! 🌈", "{person1} और {person2} साथ खेले,\n{percentage}% प्रेम में मेले।\nबचपन के दिन याद आते,\nभाई-बहन हंसी में नहाते! 🎪", "{person2} की परेशानी में {person1} साथ,\n{percentage}% प्रेम का हाथ।\nसिबलिंग्स का प्यार अनमोल,\nदिल से दिल तक का बोल! 💎", "{person1} कहता {person2} मेरी जान,\n{percentage}% प्रेम की पहचान।\nभाई-बहन का बंधन मीठा,\nजीवन भर का ये रीता! 🍯", "{person2} के सपनों में {person1} साथ,\n{percentage}% प्रेम का हाथ।\nदोनों मिलकर दुनिया जीते,\nखुशियों के गीत गाते! 🎵", "{person1} की सफलता में {person2} खुशी,\n{percentage}% प्रेम की दोस्ती।\nभाई-बहन एक दूजे के लिए,\nकरते हैं हर काम खुशी से! 😊", "{person2} और {person1} की नोक-झोंक,\n{percentage}% प्रेम का ये शोंक।\nलड़ते हैं फिर भी प्यार करते,\nएक दूसरे का ख्याल रखते! 🤗", "{person1} के दुख में {person2} रोए,\n{percentage}% प्रेम में दोनों सोए।\nसिबलिंग्स का प्यार सच्चा,\nहमेशा रहता है कच्चा! 😢", "{person2} की शादी में {person1} नाचा,\n{percentage}% प्रेम से माचा।\nभाई-बहन के रिश्ते में,\nछुपी हुई है खुशियों की माला! 💃", "{person1} और {person2} का त्योहार,\n{percentage}% प्रेम का ये संसार।\nराखी हो या दीवाली आए,\nसाथ मनाते हैं सभी त्योहार! 🎊", "{person2} के लिए {person1} की चिंता,\n{percentage}% प्रेम की विशेषता।\nभाई-बहन एक दूजे के सहारे,\nजीवन के सभी किनारे! ⛵", "{person1} कहता {person2} मेरी शान,\n{percentage}% प्रेम की पहचान।\nसिबलिंग्स का प्यार अटूट,\nकभी न होता है छूट! 👑", "{person2} की हंसी में {person1} की जान,\n{percentage}% प्रेम का सम्मान।\nभाई-बहन की मस्ती भारी,\nदुनिया लगती है प्यारी! 😄", "{person1} और {person2} के झगड़े प्यारे,\n{percentage}% प्रेम के सहारे।\nलड़कर भी रहते साथ,\nयही है सिबलिंग्स का हाथ! 🤝", "{person2} के लिए {person1} की दुआ,\n{percentage}% प्रेम की रुआ।\nभाई-बहन का प्यार दिव्य,\nजीवन को बनाता अभिव्य! 🙏", "{person1} की गलती को {person2} माफ़,\n{percentage}% प्रेम का स्टाफ़।\nसिबलिंग्स में नहीं कोई गिला,\nहमेशा रहता है मेला! 🎭", "{person2} के सपने {person1} के सपने,\n{percentage}% प्रेम के अपने।\nभाई-बहन साथ चलते,\nहर मुश्किल को पार करते! 🌟", "{person1} का प्यार {person2} के लिए,\n{percentage}% दिल के लिए।\nसिबलिंग बॉन्ड है खास,\nजीवन भर का ये एहसास! ✨", "{person2} की जीत में {person1} खुश,\n{percentage}% प्रेम का जोश।\nभाई-बहन का साथ निराला,\nहमेशा रहता है उजाला! 🏆", "{person1} और {person2} की यारी,\n{percentage}% प्रेम की भारी।\nसिबलिंग्स का प्यार गहरा,\nजीवन को बनाता बेहतर! 🌊", "{person2} के लिए {person1} का त्याग,\n{percentage}% प्रेम का राग।\nभाई-बहन एक दूजे के वास्ते,\nकरते हैं हर कुर्बानी हंसते! 🎶", "{person1} की आंखों में {person2} का प्रेम,\n{percentage}% दिल का ये गेम।\nसिबलिंग्स का रिश्ता अनोखा,\nदुनिया में सबसे सोखा! 👀", "{person2} और {person1} हमेशा साथ,\n{percentage}% प्रेम का हाथ।\nभाई-बहन का प्यार अमर,\nजीवन भर रहेगा समर! 🤞"];
+            const sibMsgs = [{min:95,max:100,message:"परफेक्ट सिबलिंग्स! Amazing Bond! 👑👫"},{min:90,max:94,message:"सुपर भाई-बहन! Great Siblings! 🌟👬"},{min:85,max:89,message:"शानदार रिश्ता! Wonderful Bond! 🏆👭"},{min:80,max:84,message:"बहुत अच्छे सिबलिंग्स! Very Good! 👍💕"},{min:75,max:79,message:"प्यारे भाई-बहन! Sweet Siblings! 🤗❤️"},{min:70,max:74,message:"अच्छा रिश्ता! Good Bond! 😊👫"},{min:65,max:69,message:"केयरिंग सिबलिंग्स! Caring Siblings! 🤲💖"},{min:60,max:64,message:"लविंग बॉन्ड! Loving Bond! 💝"},{min:50,max:59,message:"प्यार करने वाले! Loving Siblings! 💕"},{min:0,max:49,message:"रिश्ता और मजबूत बनाने का टाइम! 👫💪"}];
+            const sibSpecialMsgs = ["भाई-बहन का प्यार दुनिया की सबसे खूबसूरत चीज़ है! 💕","सिबलिंग्स हमेशा एक दूसरे के साथ रहते हैं! ❤️","भाई-बहन का बंधन जन्म-जन्म का होता है! 🙏","सिबलिंग्स की दोस्ती सबसे अच्छी होती है! 🤝","भाई-बहन एक दूसरे के सबसे अच्छे दोस्त हैं! 👯","सिबलिंग लव जीवन भर का सहारा है! 🤗"];
+            
+            relTypeSelector.querySelectorAll('.relationship-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    relTypeSelector.querySelectorAll('.relationship-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentSiblingRel = e.target.getAttribute('data-sibling-rel');
+                    switch(currentSiblingRel){case 'bhai-behen':p1Label.textContent='भाई का नाम 👦';p2Label.textContent='बहन का नाम 👧';break;case 'bhai-bhai':p1Label.textContent='पहले भाई का नाम 👦';p2Label.textContent='दूसरे भाई का नाम 👦';break;case 'behen-behen':p1Label.textContent='पहली बहन का नाम 👧';p2Label.textContent='दूसरी बहन का नाम 👧';break;}
+                });
+            });
+
+            function calcSibLove(){const n1=p1NameIn.value.trim();const n2=p2NameIn.value.trim();const ag=ageGapSel.value;if(!n1||!n2){alert('कृपया दोनों नाम भरें! 👫'); shareSiblingLoveBtn.style.display = 'none'; return}const p=genSibPerc(n1,n2,ag);const m=sibMsgs.find(msg=>p>=msg.min&&p<=msg.max).message;const s=genSibShayari(n1,n2,p);const sM=sibSpecialMsgs[Math.floor(Math.random()*sibSpecialMsgs.length)];sibPercDisp.textContent=p+'%';sibMsgDisp.textContent=m;sibShayariDisp.innerHTML=s.replace(/\n/g,'<br>');sibSpecialMsgDisp.textContent=sM;sibResultDiv.style.display='block'; shareSiblingLoveBtn.style.display = 'inline-block'; create_sibling_love_calculator_animation();}
+            siblingLoveCalcBtn.addEventListener('click',calcSibLove);[p1NameIn,p2NameIn].forEach(i=>i.addEventListener('keypress',e=>{if(e.key==='Enter')calcSibLove()}));
+            shareSiblingLoveBtn.addEventListener('click', () => {
+                const n1 = p1NameIn.value.trim();
+                const n2 = p2NameIn.value.trim();
+                const percentage = sibPercDisp.textContent;
+                const message = sibMsgDisp.textContent;
+                const shayariText = sibShayariDisp.innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+                const specialMessage = sibSpecialMsgDisp.textContent.trim();
+                let relTypeString = "भाई-बहन";
+                if (currentSiblingRel === 'bhai-bhai') relTypeString = "भाई-भाई";
+                if (currentSiblingRel === 'behen-behen') relTypeString = "बहन-बहन";
+
+                const shareTitle = `🧑‍🤝‍🧑 ${n1} और ${n2} (${relTypeString}) का प्यार % - FunSpark`;
+                let shareText = 
+`मैंने FunSpark पर ${n1} और ${n2} (${relTypeString}) का प्यार चेक किया! 💝\n
+परिणाम:\n💖 प्यार का प्रतिशत: ${percentage}\n💬 संदेश: ${message}\n`;
+                if (shayariText) {
+                    shareText += `\n✨ ${relTypeString} के प्यार पर शायरी ✨\n${shayariText}\n`;
+                }
+                if (specialMessage) {
+                    shareText += `\n💌 खास संदेश: ${specialMessage}\n`;
+                }
+                shareText += `\nआप भी अपने भाई/बहन का प्यार जानें FunSpark पर! 😊\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+            function genSibPerc(n1,n2,ag){let s=0;const c=(n1+n2).toLowerCase();for(let i=0;i<c.length;i++){s+=c.charCodeAt(i)*(i+3)+Math.pow(i,1.5)}const aB={'1-2':15,'3-5':10,'6-10':5,'10+':8};s+=aB[ag]||0;const rB={'bhai-behen':12,'bhai-bhai':10,'behen-behen':14};s+=rB[currentSiblingRel]||0;s+=25;return Math.floor((s%46)+55)}
+            function genSibShayari(p1,p2,p){const tS=new Date().getTime();const nH=(p1+p2).split('').reduce((a,b)=>a+b.charCodeAt(0),0);const rI=(tS+nH)%sibShayariTmpls.length;const tmpl=sibShayariTmpls[rI];return tmpl.replace(/{person1}/g,p1).replace(/{person2}/g,p2).replace(/{percentage}/g,p)}
+            window.create_sibling_love_calculator_animation = ()=>{ if(!sibHeartsCont) return; sibHeartsCont.innerHTML='';const hE=['💝','👫','👬','👭','💕','❤️','🤗','⭐','💖'];for(let i=0;i<10;i++){setTimeout(()=>{const h=document.createElement('div');h.className='heart-item';h.innerHTML=hE[Math.floor(Math.random()*hE.length)];h.style.left=Math.random()*100+'%';h.style.animationDelay=Math.random()*2+'s';h.style.fontSize=(20+Math.random()*20)+'px';sibHeartsCont.appendChild(h);setTimeout(()=>{if(h.parentNode)h.parentNode.removeChild(h)},6000)},i*150)}}
+        }
+
+        // --- Shayari Generator (NEW) ---
+        const sg_relationshipData = { 
+            friends: { title: "दोस्ती की शायरी 👯‍♂️", shayari: [ "{name1} और {name2} की दोस्ती निराली,\nजैसे चाँद में हो चाँदनी उजाली।\nमुश्किलों में साथ, खुशियों में शामिल,\nयारी की ये कहानी है कमाल! 🌙✨", "{name2} कहता {name1} तू मेरा यार,\nतेरे बिना लगता जीवन बेकार।\nदोस्ती का ये रिश्ता प्यारा,\nहमेशा रहे हमारा सहारा! 🤝💙", "{name1} की मुसीबत में {name2} साथ,\nदोस्ती का ये मजबूत हाथ।\nहंसी-खुशी हो या आंसू,\nसाथ निभाते हैं हर रस्म! 😊😢", "जब {name1} परेशान, {name2} आ जाता,\nदोस्ती का फर्ज ये निभाता।\nयारों की जोड़ी लाजवाब,\nजिंदगी भर का ये हिसाब! 💪🎯" ], jokes: [ "🤪 {name1}: यार {name2}, मैं बहुत परेशान हूं!\n{name2}: क्यों भाई?\n{name1}: मेरी GF ने मुझे BLOCK कर दिया!\n{name2}: अरे यार, कोई बात नहीं... मैं भी तो हूं ना! 😂", "😂 {name1} और {name2} रेस्टोरेंट में...\n{name1}: यार बिल कौन देगा?\n{name2}: वो देखिए जो ज्यादा HANDSOME है!\n*दोनों wallet निकालते हैं* 😎💳", "🤣 {name2}: {name1}, तू इतना SMART कैसे है?\n{name1}: यार, मेरे सभी दोस्त बेवकूफ हैं!\n{name2}: लेकिन मैं तो तेरा दोस्त हूं...\n{name1}: हां, इसीलिए तो! 😜" ], facts: [ { emoji: "🎭", text: "असली दोस्त वो होता है जो आपकी बेवकूफी पर हंसे लेकिन आपको बेवकूफ न समझे!" }, { emoji: "📱", text: "अच्छे दोस्त आपके फोन की battery से भी ज्यादा reliable होते हैं!" }, { emoji: "🍕", text: "सच्चे दोस्त pizza का आखिरी टुकड़ा share करते हैं - यही है दोस्ती की परीक्षा!" } ] },
+            lovers: { title: "प्रेम की शायरी 💕", shayari: [ "{name1} की आंखों में {name2} के सपने,\nप्रेम के ये रंग-बिरंगे अपने।\nदिल की धड़कन में बसा नाम,\nइश्क का ये अनमोल इनाम! 💖👀", "{name2} कहती {name1} तू मेरी जान,\nतेरे प्यार में खो गई है पहचान।\nमुहब्बत की ये मधुर कहानी,\nजीवन भर चले प्रेम की रानी! 👸💝", "चांदनी रात में {name1} और {name2},\nप्रेम की बातें और प्यार की खुशी।\nदोनों के दिल एक ही सुर में,\nबजती है प्रेम की मधुर सी ट्यूनी! 🌙🎵", "{name1} के बिना {name2} अधूरी,\nजैसे रात हो चांद के बिना पूरी।\nइश्क की ये प्यारी दास्तान,\nजीवन भर का मिला वरदान! 🌃✨" ], jokes: [ "😍 {name1}: {name2}, मुझसे शादी करोगी?\n{name2}: हां, लेकिन एक शर्त है!\n{name1}: कैसी शर्त?\n{name2}: तुम्हें मेरी हर बात माननी होगी!\n{name1}: Deal! वैसे भी अभी तक मान ही रहा था! 😂💍", "🤪 {name2}: {name1}, तुम मुझसे कितना प्यार करते हो?\n{name1}: इतना कि मैं तुम्हारे लिए चांद तारे तोड़ लाऊं!\n{name2}: चलो NASA जाते हैं!\n{name1}: अरे यार, वो तो बस कहने की बात थी! 🚀🌙", "😘 {name1} और {name2} का प्यार इतना गहरा है कि...\nGoogle भी उनकी love story search नहीं कर पाता! 🔍❤️" ], facts: [ { emoji: "💘", text: "प्यार में पड़ने पर दिमाग उसी केमिकल को release करता है जो chocolate खाने पर होता है!" }, { emoji: "💑", text: "जो couple एक साथ हंसते हैं, वे ज्यादा लंबे समय तक साथ रहते हैं!" }, { emoji: "💝", text: "सच्चे प्यार में लोग एक दूसरे की आंखों में 75% ज्यादा समय देखते हैं!" } ] },
+            siblings: { title: "भाई-बहन का प्यार 👫", shayari: [ "{name1} और {name2} भाई-बहन प्यारे,\nएक दूसरे के जीवन के सहारे।\nलड़ते-झगड़ते, प्यार भी करते,\nमुश्किल वक्त में साथ खड़े रहते! 🤗💪", "{name2} की परेशानी में {name1} आ जाता,\nभाई-बहन का फर्ज ये निभाता।\nप्यार और नोकझोंक का मेल,\nजीवन भर चलता ये खेल! 🎮❤️", "छोटी सी बात पर लड़ाई होती,\nफिर प्यार से गले मिल जाती।\n{name1} और {name2} का रिश्ता निराला,\nजैसे हो खुशियों का प्याला! 🥤😊" ], jokes: [ "😂 {name1}: मम्मी, {name2} ने मेरा chocolate चुराया!\n{name2}: नहीं मम्मी, मैंने सिर्फ taste किया था!\n{name1}: पूरा chocolate taste कर गया! 🍫😤", "🤣 {name2}: {name1}, तू इतना annoying क्यों है?\n{name1}: भगवान ने मुझे specially तेरे लिए बनाया है!\n{name2}: तो भगवान को complaint करूंगी! 📞😜", "😝 Mom: {name1} और {name2}, क्यों लड़ रहे हो?\nदोनों एक साथ: वो पहले चिढ़ाया! 👆👆" ], facts: [ { emoji: "👑", text: "भाई-बहन आपस में लड़ सकते हैं, लेकिन कोई तीसरा व्यक्ति उनमें से किसी को भी परेशान करे तो वे एक हो जाते हैं!" }, { emoji: "🎁", text: "भाई-बहन एक-दूसरे के साथ दुनिया की सबसे honest conversations करते हैं!" }, { emoji: "🏆", text: "भाई-बहन का रिश्ता दुनिया का एकमात्र ऐसा रिश्ता है जहां आप किसी को परेशान कर सकते हैं और फिर भी प्यार कर सकते हैं!" } ] },
+            "parent-child": { title: "माता-पिता और संतान का प्रेम 👨‍👧", shayari: [ "{name1} की ममता में {name2} पला-बढ़ा,\nमां-बाप का प्यार अटूट रहा।\nहर मुश्किल में साथ दिया,\nजीवन का सबसे अनमोल रिश्ता! 🤱💕", "{name2} के सपनों को {name1} पूरा करता,\nबेटे-बेटी का ख्याल रखता।\nमाता-पिता का प्यार निराला,\nजीवन भर का ये हवाला! 👨‍👧‍👦🌟", "{name1} की आंखों में {name2} का भविष्य,\nसंतान के लिए हर सपना विशुद्ध।\nप्यार और आशीर्वाद का मेल,\nमाता-पिता का ये प्रेम का खेल! 🙏✨" ], jokes: [ "😂 {name2}: Papa {name1}, मुझे bike चाहिए!\n{name1}: पहले marks लाओ!\n{name2}: Dad, अगर मैं topper आऊं तो?\n{name1}: तो celebration में bike दिलवा देंगे! 🏍️📚", "🤣 {name1}: {name2}, तुम्हारे exam कैसे गए?\n{name2}: Dad, paper तो आसान था... बस मुझे नहीं आता था! 😅📝", "😜 {name2}: Mom {name1}, सब बच्चे iPhone use करते हैं!\n{name1}: तो सब बच्चों के parents अमीर होंगे! 💰📱" ], facts: [ { emoji: "💝", text: "माता-पिता अपने बच्चों के लिए औसतन 18 साल तक हर दिन चिंता करते हैं!" }, { emoji: "🎓", text: "Parents अपने बच्चों की सफलता में अपनी सफलता देखते हैं!" }, { emoji: "🏠", text: "घर वो जगह है जहां parents आपका हमेशा wait करते हैं, चाहे आप कितने भी बड़े हो जाएं!" } ] },
+            "husband-wife": { title: "पति-पत्नी का प्रेम 💏", shayari: [ "{name1} और {name2} जीवनसाथी प्यारे,\nएक दूसरे के सुख-दुख के सहारे।\nसात जन्मों का वादा निभाते,\nप्रेम की राह पर साथ चलते जाते! 💑🌺", "{name2} की खुशी में {name1} की खुशी,\nपति-पत्नी का प्रेम अद्भुत सुखी।\nजीवन के हर मोड़ पर साथ,\nप्रेम का ये अटूट हाथ! 🤝💕", "घर में {name1} और {name2} का राज,\nप्रेम से भरा जीवन का समाज।\nदोनों मिलकर बनाते स्वर्ग,\nखुशियों से भरा जीवन पर्व! 🏠🎉" ], jokes: [ "😂 {name2}: {name1}, तुम मुझसे कितना प्यार करते हो?\n{name1}: इतना कि तुम्हारे लिए दुनिया के सारे काम छोड़ दूं!\n{name2}: तो कल से dishes तुम करना! 🍽️😜", "🤣 {name1}: {name2}, dinner में क्या बनाया है?\n{name2}: तुम्हारे लिए special प्यार से!\n{name1}: अच्छा... तो pizza order करता हूं! 🍕😅", "😘 Wife {name2}: Husband {name1} is perfect!\nFriend: Really?\n{name2}: हां, perfect liar है! 🤥💯" ], facts: [ { emoji: "💒", text: "खुशहाल शादी करने वाले couples औसतन 7 साल ज्यादा जीते हैं!" }, { emoji: "🤗", text: "पति-पत्नी जो रोज hug करते हैं, उनका relationship ज्यादा strong होता है!" }, { emoji: "😂", text: "जो couples एक साथ हंसते हैं, वे तनाव कम महसूस करते हैं!" } ] },
+            "grandparent-grandchild": { title: "दादा-दादी और पोते का प्रेम 👴👧", shayari: [ "{name1} दादा/दादी की {name2} लाडली/लाडला,\nप्यार की ये कहानी अनमोली।\nकहानियों और किस्सों का खजाना,\nदादा-पोते का प्रेम दीवाना! 📚💖", "{name2} की शरारत पर {name1} खुश,\nदादा-दादी का प्यार और आशीष।\nजीवन भर का ये साथ अनमोल,\nजैसे मीठे बेर और आम का घोल! 👵👴💕", "जब {name1} सुनाते हैं कहानी, {name2} सुनता ध्यान से,\nज्ञान और प्यार का ये संगम, जीवन में भरता शान से।\nआशीर्वाद की छांव में, खिलता है हर फूल,\nदादा-दादी का प्यार, कभी न जाना भूल। 🤗🌟" ], jokes: [ "😂 {name2}: दादाजी {name1}, आपकी उम्र कितनी है?\n{name1}: बेटा, इतनी कि तुम्हारे सारे चॉकलेट्स गिन सकता हूँ!\n{name2}: अरे वाह, फिर तो आप बहुत यंग हैं! 🍫😉", "🤣 {name1} (दादी): बेटा {name2}, ये लो मिठाई!\n{name2}: दादी, मम्मी ने मीठा खाने से मना किया है।\n{name1}: अरे, मम्मी को कौन बताएगा? ये हमारा सीक्रेट! 🤫🍬", "👴 {name1}: बेटा {name2}, जब मैं तुम्हारी उम्र का था तो पेड़ पर चढ़ जाता था!\n{name2}: दादाजी, अब भी चढ़ सकते हो, मैं रस्सी ले आऊं? 🧗‍♂️😜" ], facts: [ { emoji: "💖", text: "दादा-दादी और पोते-पोतियों का रिश्ता बिना शर्त प्यार और ढेर सारी मिठाइयों से भरा होता है!" }, { emoji: "📖", text: "दादा-दादी अपने पोते-पोतियों को जीवन के सबसे अच्छे सबक कहानियों के माध्यम से सिखाते हैं।" }, { emoji: "🎁", text: "पोते-पोतियों के लिए दादा-दादी का घर दुनिया की सबसे सुरक्षित और मजेदार जगह होती है!" } ] },
+            cousins: { title: "चचेरे भाई-बहन का मस्ती भरा रिश्ता 👨‍👨‍👧‍👦", shayari: [ "{name1} और {name2}, कजिन्स का ये साथ,\nबचपन की यादें, मस्ती भरी रात।\nएक दूसरे के राज़दार, खुशियों के हकदार,\nये रिश्ता है सबसे प्यारा और शानदार! 🎉🥳", "मिलते हैं जब {name1} और {name2} प्यारे,\nखिल उठते हैं खुशियों के सितारे।\nनोक-झोंक और ढेर सारा प्यार,\nकजिन्स का रिश्ता है सदाबहार! 🌟💞", "दूर रहकर भी पास हैं {name1} और {name2},\nबचपन की शरारतें, अब भी हैं ताज़ा।\nमिलने पर होता है धमाल, कजिन्स का ये कमाल,\nरिश्ता ये अनमोल, रखता सबका ख्याल। 🤝🎈" ], jokes: [ "😜 {name1}: यार {name2}, याद है बचपन में कैसे लड़ते थे?\n{name2}: हाँ, और आज भी लड़ते हैं, बस टॉपिक बदल गए हैं! Remote vs Charger! 📺🔌", "😂 Family Gathering में...\nRelative: {name1} और {name2}, तुम दोनों कितने बड़े हो गए!\n{name1} (to {name2} slowly): और कितने मोटे भी! 🤫🍔", "🤣 {name2}: {name1}, चल कुछ तूफानी करते हैं!\n{name1}: जैसे कि मम्मी को बताना कि रिमोट किसने तोड़ा?\n{name2}: नहीं यार, उतना तूफानी भी नहीं! 🌬️📺" ], facts: [ { emoji: "🎉", text: "कजिन्स अक्सर पहले दोस्त होते हैं और जीवन भर के लिए क्राइम पार्टनर भी!" }, { emoji: "🤫", text: "कजिन्स के पास आपके बचपन के वो सारे राज़ होते हैं जो आप दुनिया से छुपाना चाहते हैं।" }, { emoji: "😂", text: "कजिन्स के साथ बिताया गया समय हमेशा हंसी और पागलपन से भरा होता है।" } ] },
+            colleagues: { title: "सहकर्मियों का साथ 👔", shayari: [ "ऑफिस में {name1} और {name2} का साथ,\nकाम का बोझ हल्का करते, हर एक बात।\nचाय पर चर्चा, प्रोजेक्ट्स पर मेहनत,\nसहकर्मियों का रिश्ता, देता राहत! ☕🤝", "{name2} की मदद से {name1} का काम आसान,\nटीमवर्क की भावना, यही है पहचान।\nलक्ष्य एक, रास्ते अनेक, बढ़ते जाएं,\nसहकर्मियों का ये रिश्ता, सफलता दिलाए! 🏆💼", "डेडलाइन का टेंशन, बॉस की बातें,\n{name1} और {name2} मिलकर सुलझाते।\nप्रोफेशनल दुनिया में, ये भी एक परिवार,\nसहकर्मियों का साथ, खुशियों का आधार! 😊📊" ], jokes: [ "😴 {name1}: यार {name2}, Monday कैसा लग रहा है?\n{name2}: जैसे Friday का Hangover अभी तक उतरा नहीं!\n{name1}: Same pinch! ☕😩", " बॉस: {name1}, तुम लेट क्यों हो?\n{name1}: सर, {name2} के साथ एक 'बहुत ज़रूरी' मीटिंग में था... कैंटीन में! 🍔🤫", "😂 {name2}: {name1}, इस प्रोजेक्ट का क्या करें?\n{name1}: वही जो हम हमेशा करते हैं... Deadline से एक रात पहले! 💻🌙" ], facts: [ { emoji: "☕", text: "ऑफिस में अच्छे सहकर्मी होने से काम का तनाव 50% तक कम हो सकता है (कॉफी का योगदान अलग!)।" }, { emoji: "🤝", text: "एक सपोर्टिव सहकर्मी प्रोडक्टिविटी को बढ़ा सकता है और ऑफिस के माहौल को खुशनुमा बना सकता है।" }, { emoji: "💡", text: "सहकर्मियों के साथ ब्रेनस्टॉर्मिंग से अक्सर बेहतरीन आइडियाज निकलते हैं।" } ] },
+            neighbors: { title: "पड़ोसियों का प्यार और तकरार 🏠", shayari: [ "{name1} और {name2}, पड़ोसी प्यारे,\nसुख-दुख में होते हैं सहारे।\nकभी चीनी कम, कभी बातें ज्यादा,\nपड़ोस का रिश्ता, निभाते वादा! 🏡😊", "दीवारें भले अलग, दिल तो मिले हैं,\n{name1} और {name2}, पड़ोसी खिले हैं।\nत्योहारों में रौनक, मुश्किल में साथ,\nपड़ोस का ये रिश्ता, है खास! 🌟🤝", "सुबह की नमस्ते, शाम की चाय,\n{name1} और {name2} के घर खुशियां लाए।\nएक दूसरे का रखते ख्याल, ये रिश्ता बेमिसाल,\nपड़ोसियों का प्यार, हरदम खुशहाल! 😄💖" ], jokes: [ "😂 {name1}: {name2} जी, आपके घर से गाने की आवाज़ आ रही थी, बड़ा अच्छा गाते हैं!\n{name2}: धन्यवाद, वो तो मैं बाथरूम सिंगर हूँ!\n{name1}: अरे, मुझे लगा कोई प्रोफेशनल है! 🎤🚿", "🏡 {name2}: {name1} जी, आपकी बिल्ली मेरी मछली खा गई!\n{name1}: अरे, मैंने तो उसे शाकाहारी ट्रेनिंग दी थी!\n{name2}: लगता है आज उसका चीट डे था! 😼🐠", "😜 {name1}: {name2} जी, वाई-फाई का पासवर्ड क्या है?\n{name2}: पहले मेरे गार्डन में पानी डालो!\n{name1}: डील! कनेक्शन के लिए कुछ भी! 💧📶" ], facts: [ { emoji: "🤝", text: "अच्छे पड़ोसी सुरक्षा की भावना को बढ़ाते हैं और समुदाय को मजबूत करते हैं।" }, { emoji: "🏡", text: "पड़ोसी अक्सर पहले व्यक्ति होते हैं जो आपात स्थिति में मदद के लिए पहुंचते हैं।" }, { emoji: "☕", text: "कभी-कभी एक कप चीनी मांगने से शुरू हुई बात जीवन भर की दोस्ती में बदल सकती है।" } ] },
+            "teacher-student": { title: "गुरु-शिष्य का अनमोल रिश्ता 👨‍🏫👨‍🎓", shayari: [ "{name1} गुरु ने {name2} शिष्य को दिया ज्ञान,\nजीवन की राह दिखाई, बनाया महान।\nअज्ञान का अंधकार मिटाया, विद्या का दीप जलाया,\nगुरु-शिष्य का ये रिश्ता, जग में सबसे न्यारा! 📚✨", "{name2} की जिज्ञासा, {name1} का उपदेश,\nसफलता की ओर ले जाता, हर एक क्लेश।\nगुरु की महिमा अपरंपार, शिष्य का उन पर विश्वास,\nये रिश्ता है पवित्र, जैसे गंगा का वास! 🙏🌟", "ज्ञान की ज्योति जलाई {name1} ने,\n{name2} के जीवन को राह दिखाई उसने।\nआदर और सम्मान से भरा ये नाता,\nगुरु-शिष्य परंपरा, युगों-युगों तक गाता। 🎓💖" ], jokes: [ "😂 {name2} (छात्र): सर {name1}, क्या मैं एक बेवकूफी भरे सवाल के लिए सज़ा पा सकता हूँ?\n{name1} (शिक्षक): नहीं बेटा, बिल्कुल नहीं!\n{name2}: ठीक है सर, तो क्या डायनासोर होमवर्क करते थे? 🦖📝", "🤣 {name1} (शिक्षक): {name2}, तुम्हारा होमवर्क कहाँ है?\n{name2}: सर, मेरा कुत्ता खा गया!\n{name1}: बेटा, ये बहाना तो मेरे दादाजी भी सुनते थे!\n{name2}: तो सर, क्या आपका कुत्ता भी होमवर्क खाता था? 🐶📚", "😜 {name1}: {name2}, बताओ 2 और 2 कितने होते हैं?\n{name2}: सर, खरीदने वाले हैं या बेचने वाले?\n{name1}: बेटा, ये मैथ्स क्लास है, दुकान नहीं! ➕➖" ], facts: [ { emoji: "💡", text: "एक अच्छा शिक्षक मोमबत्ती की तरह होता है, जो खुद जलकर दूसरों को प्रकाश देता है।" }, { emoji: "📚", text: "गुरु-शिष्य का संबंध ज्ञान, सम्मान और विश्वास पर आधारित होता है।" }, { emoji: "🌟", text: "एक प्रेरणादायक शिक्षक छात्र के जीवन की दिशा बदल सकता है और उसे महान ऊंचाइयों तक पहुंचा सकता है।" } ] }
+        };
+
+        window.sg_generateContent = function() { 
+            const firstName = document.getElementById('sg-first-name').value.trim();
+            const secondName = document.getElementById('sg-second-name').value.trim();
+            const relationshipType = document.getElementById('sg-relationship-type').value;
+            const resultDiv = document.getElementById('sg-result');
+            const shareBtn = document.getElementById('share-sg-result-btn');
+
+            if (!firstName || !secondName) {
+                alert("कृपया दोनों नाम भरें!");
+                resultDiv.style.display = 'none';
+                if(shareBtn) shareBtn.style.display = 'none';
+                return;
+            }
+
+            const data = sg_relationshipData[relationshipType];
+            if (!data) {
+                alert("चुने गए रिश्ते के लिए डेटा उपलब्ध नहीं है।");
+                resultDiv.style.display = 'none';
+                if(shareBtn) shareBtn.style.display = 'none';
+                return;
+            }
+
+            document.getElementById('sg-names-display').innerText = `${firstName} और ${secondName}`;
+            document.getElementById('sg-relation-title').innerText = data.title;
+
+            const shayariSectionDiv = document.getElementById('sg-shayari-section');
+            if (data.shayari && data.shayari.length > 0) {
+                const randomShayari = data.shayari[Math.floor(Math.random() * data.shayari.length)];
+                shayariSectionDiv.innerHTML = randomShayari
+                    .replace(/{name1}/g, firstName)
+                    .replace(/{name2}/g, secondName)
+                    .replace(/\n/g, '<br>');
+                shayariSectionDiv.style.display = 'block';
+            } else {
+                shayariSectionDiv.innerHTML = '';
+                shayariSectionDiv.style.display = 'none';
+            }
+
+            const jokesContainer = document.getElementById('sg-jokes-section-container');
+            const jokesContent = document.getElementById('sg-jokes-content');
+            jokesContent.innerHTML = '';
+            if (data.jokes && data.jokes.length > 0) {
+                const shuffledJokes = [...data.jokes].sort(() => 0.5 - Math.random());
+                const selectedJokes = shuffledJokes.slice(0, Math.min(3, shuffledJokes.length));
+
+                selectedJokes.forEach(jokeTemplate => {
+                    const jokeHTML = jokeTemplate
+                        .replace(/{name1}/g, firstName)
+                        .replace(/{name2}/g, secondName)
+                        .replace(/\n/g, '<br>');
+                    const jokeItem = document.createElement('div');
+                    jokeItem.classList.add('sg-joke-item');
+                    jokeItem.innerHTML = jokeHTML;
+                    jokesContent.appendChild(jokeItem);
+                });
+                jokesContainer.style.display = 'block';
+            } else {
+                jokesContainer.style.display = 'none';
+            }
+
+            const funFactsContainer = document.getElementById('sg-fun-facts-section-container');
+            const funFactsContent = document.getElementById('sg-fun-facts-content');
+            funFactsContent.innerHTML = '';
+            if (data.facts && data.facts.length > 0) {
+                const shuffledFacts = [...data.facts].sort(() => 0.5 - Math.random());
+                const selectedFacts = shuffledFacts.slice(0, Math.min(3, shuffledFacts.length));
+
+                selectedFacts.forEach(fact => {
+                    const factItem = document.createElement('div');
+                    factItem.classList.add('sg-fun-fact-item');
+                    factItem.innerHTML = `
+                        <span class="sg-fact-emoji">${fact.emoji}</span>
+                        <span class="sg-fact-text">${fact.text
+                            .replace(/{name1}/g, firstName)
+                            .replace(/{name2}/g, secondName)
+                        }</span>
+                    `;
+                    funFactsContent.appendChild(factItem);
+                });
+                funFactsContainer.style.display = 'block';
+            } else {
+                funFactsContainer.style.display = 'none';
+            }
+
+            resultDiv.style.display = 'block';
+            if(shareBtn) shareBtn.style.display = 'inline-block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // MODIFICATION: Call the emoji animation function here
+            if (typeof create_shayari_generator_animation === 'function') {
+                create_shayari_generator_animation();
+            }
+        }
+
+        window.create_shayari_generator_animation = () => { 
+            const emojiContainer = document.getElementById('sg-floating-emojis');
+            if (!emojiContainer) return;
+            emojiContainer.innerHTML = ''; 
+
+            const emojis = ['💖', '😂', '🎉', '✨', '😊', '👍', '🥳', '🎈', '🌟', '💕', '🎭', '🎁', '🥂', '💯'];
+            const numEmojisToCreate = 15 + Math.floor(Math.random() * 10); // Create a burst of 15-24 emojis
+
+            for(let i = 0; i < numEmojisToCreate; i++) {
+                setTimeout(() => { // Stagger their creation slightly
+                    if (document.hidden) return; 
+
+                    const emoji = document.createElement('span');
+                    emoji.classList.add('sg-emoji-item');
+                    emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    emoji.style.left = Math.random() * 100 + 'vw';
+                    const duration = Math.random() * 5 + 7; 
+                    emoji.style.animationDuration = duration + 's';
+                    emoji.style.fontSize = (Math.random() * 15 + 15) + 'px'; 
+
+                    emojiContainer.appendChild(emoji);
+
+                    setTimeout(() => {
+                        if (emoji.parentElement) { 
+                           emoji.remove();
+                        }
+                    }, duration * 1000 + 500);
+                }, Math.random() * 500); // Create over 0.5 seconds
+            }
+        }
+        
+        document.querySelectorAll('#shayari-generator-page .sg-relation-icons span').forEach(iconSpan => {
+            iconSpan.addEventListener('click', () => {
+                const relationshipSelect = document.getElementById('sg-relationship-type');
+                const title = iconSpan.getAttribute('title');
+                let valueToSet = '';
+
+                if (title === 'दोस्त') valueToSet = 'friends';
+                else if (title === 'प्रेमी') valueToSet = 'lovers';
+                else if (title === 'परिवार') valueToSet = 'parent-child';
+                else if (title === 'भाई-बहन') valueToSet = 'siblings';
+                else if (title === 'माता-पिता') valueToSet = 'parent-child';
+                else if (title === 'दादा-दादी') valueToSet = 'grandparent-grandchild';
+                
+                if (valueToSet && relationshipSelect.querySelector(`option[value="${valueToSet}"]`)) {
+                    relationshipSelect.value = valueToSet;
+                }
+            });
+        });
+
+        const shareSgResultBtn = document.getElementById('share-sg-result-btn');
+        if(shareSgResultBtn) {
+            shareSgResultBtn.addEventListener('click', () => {
+                const firstName = document.getElementById('sg-first-name').value.trim();
+                const secondName = document.getElementById('sg-second-name').value.trim();
+                const relTitle = document.getElementById('sg-relation-title').textContent;
+                
+                const shayariText = document.getElementById('sg-shayari-section').innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+                const jokesContainer = document.getElementById('sg-jokes-section-container');
+                let jokesText = "";
+                if (jokesContainer && jokesContainer.style.display !== 'none') {
+                    jokesText = Array.from(document.getElementById('sg-jokes-content').children)
+                                     .map(joke => joke.innerHTML.replace(/<br\s*\/?>/gi, '\n').trim())
+                                     .join('\n\n');
+                }
+
+                const factsContainer = document.getElementById('sg-fun-facts-section-container');
+                let factsText = "";
+                if (factsContainer && factsContainer.style.display !== 'none') {
+                     factsText = Array.from(document.getElementById('sg-fun-facts-content').children)
+                                     .map(fact => `${fact.querySelector('.sg-fact-emoji').textContent.trim()} ${fact.querySelector('.sg-fact-text').textContent.trim()}`)
+                                     .join('\n');
+                }
+
+                const shareTitle = `🎭 ${firstName} और ${secondName} के लिए ${relTitle} - FunSpark`;
+                let shareText = `FunSpark शायरी जेनरेटर से ${firstName} और ${secondName} के लिए कुछ मजेदार सामग्री:\n\n📜 ${relTitle} 📜\n`;
+
+                if (shayariText) {
+                    shareText += `\n✨ शायरी ✨\n${shayariText}\n`;
+                }
+                if (jokesText) {
+                    shareText += `\n😂 मजेदार जोक्स 😂\n${jokesText}\n`;
+                }
+                if (factsText) {
+                    shareText += `\n🎉 रोचक तथ्य 🎉\n${factsText}\n`;
+                }
+                shareText += `\nआप भी अपनी शायरी और जोक्स जेनरेट करें FunSpark पर! 😄\n${window.location.href.split('#')[0]}`;
+                shareContent(shareTitle, shareText, window.location.href.split('#')[0]);
+            });
+        }
+
+    });
+    </script>
+</body>
+</html>
